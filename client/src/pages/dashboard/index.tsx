@@ -19,7 +19,7 @@ export default function Dashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Total Posts</p>
@@ -30,7 +30,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Engagement</p>
@@ -41,7 +41,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Followers</p>
@@ -52,7 +52,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Engagement Rate</p>
@@ -66,7 +66,7 @@ export default function Dashboard() {
 
         {/* Quick Actions & Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-3">
               <Button variant="outline" className="justify-start">
@@ -88,7 +88,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="glass-card p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
             <div className="space-y-3">
               {[
@@ -109,7 +109,7 @@ export default function Dashboard() {
         </div>
 
         {/* Performance Chart */}
-        <Card className="p-6">
+        <Card className="glass-card p-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
             Performance Overview

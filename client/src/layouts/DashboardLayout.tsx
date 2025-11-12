@@ -9,7 +9,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   SidebarInset,
   SidebarHeader,
 } from '@/components/ui/sidebar';
@@ -54,7 +53,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      {/* Circuit Background */}
+      <div className="circuit-bg" />
+
+      <Sidebar collapsible="none">
         <SidebarHeader className="p-4 border-b">
           <div className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-primary" />
@@ -141,7 +143,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-primary">SFS PowerHouse</h2>
+          </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4">
           {children}

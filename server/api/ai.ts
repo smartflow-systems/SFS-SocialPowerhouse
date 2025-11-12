@@ -3,10 +3,10 @@ import OpenAI from 'openai';
 
 const router = Router();
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client (optional - will be null if no API key)
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 const TONE_PROMPTS = {
   professional: 'Write in a professional, formal, and business-like tone.',
@@ -24,6 +24,13 @@ const TONE_PROMPTS = {
 // Generate content
 router.post('/generate', async (req, res) => {
   try {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please add OPENAI_API_KEY to your .env file'
+      });
+    }
+
     const { prompt, tone, platforms, keywords, cta } = req.body;
 
     if (!prompt) {
@@ -75,6 +82,13 @@ router.post('/generate', async (req, res) => {
 // Generate caption
 router.post('/caption', async (req, res) => {
   try {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please add OPENAI_API_KEY to your .env file'
+      });
+    }
+
     const { imageDescription, tone, platform } = req.body;
 
     if (!imageDescription) {
@@ -111,6 +125,13 @@ router.post('/caption', async (req, res) => {
 // Generate hashtags
 router.post('/hashtags', async (req, res) => {
   try {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please add OPENAI_API_KEY to your .env file'
+      });
+    }
+
     const { topic, count = 10, platform } = req.body;
 
     if (!topic) {
@@ -148,6 +169,13 @@ router.post('/hashtags', async (req, res) => {
 // Repurpose content
 router.post('/repurpose', async (req, res) => {
   try {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please add OPENAI_API_KEY to your .env file'
+      });
+    }
+
     const { content, fromPlatform, toPlatforms } = req.body;
 
     if (!content || !toPlatforms) {
@@ -186,6 +214,13 @@ router.post('/repurpose', async (req, res) => {
 // Optimize content
 router.post('/optimize', async (req, res) => {
   try {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI API key not configured',
+        message: 'Please add OPENAI_API_KEY to your .env file'
+      });
+    }
+
     const { content, platform, goal } = req.body;
 
     if (!content) {

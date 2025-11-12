@@ -40,8 +40,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+      {/* Circuit Background */}
+      <div className="circuit-bg" />
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
@@ -52,7 +55,7 @@ export default function Login() {
         </div>
 
         {/* Login Card */}
-        <Card className="p-6">
+        <Card className="glass-card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="email">Email Address</Label>
