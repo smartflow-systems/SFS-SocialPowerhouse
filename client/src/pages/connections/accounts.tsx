@@ -15,10 +15,10 @@ export default function SocialAccounts() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
             <Globe className="w-8 h-8 text-primary" />
             Social Accounts
           </h1>
@@ -28,9 +28,9 @@ export default function SocialAccounts() {
         </div>
 
         {/* Connected Accounts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {platforms.map((platform) => (
-            <Card key={platform.name} className="glass-card p-6">
+            <Card key={platform.name} className="glass-card p-4">
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-lg font-semibold">{platform.name}</h3>
                 {platform.connected ? (

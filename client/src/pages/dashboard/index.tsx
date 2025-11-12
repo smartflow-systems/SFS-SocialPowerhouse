@@ -6,10 +6,10 @@ import { Sparkles, Calendar, TrendingUp, Users, BarChart3, Zap } from 'lucide-re
 export default function Dashboard() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Welcome Section */}
         <div>
-          <h1 className="text-3xl font-bold mb-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2">
             Welcome back!
           </h1>
           <p className="text-muted-foreground">
@@ -18,45 +18,45 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="glass-card p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Total Posts</p>
-                <h3 className="text-3xl font-bold mt-2">1,234</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">1,234</h3>
                 <p className="text-sm text-green-600 mt-2">+12.5% from last month</p>
               </div>
               <Calendar className="w-8 h-8 text-primary" />
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Engagement</p>
-                <h3 className="text-3xl font-bold mt-2">45.2K</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">45.2K</h3>
                 <p className="text-sm text-green-600 mt-2">+8.3% from last month</p>
               </div>
               <Zap className="w-8 h-8 text-primary" />
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Followers</p>
-                <h3 className="text-3xl font-bold mt-2">23.5K</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">23.5K</h3>
                 <p className="text-sm text-green-600 mt-2">+15.2% from last month</p>
               </div>
               <Users className="w-8 h-8 text-primary" />
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Engagement Rate</p>
-                <h3 className="text-3xl font-bold mt-2">3.8%</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">3.8%</h3>
                 <p className="text-sm text-red-600 mt-2">-2.1% from last month</p>
               </div>
               <BarChart3 className="w-8 h-8 text-primary" />
@@ -65,8 +65,8 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Actions & Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="glass-card p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card className="glass-card p-4">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-3">
               <Button variant="outline" className="justify-start">
@@ -88,7 +88,7 @@ export default function Dashboard() {
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
             <div className="space-y-3">
               {[
@@ -109,7 +109,7 @@ export default function Dashboard() {
         </div>
 
         {/* Performance Chart */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
             Performance Overview

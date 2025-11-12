@@ -139,11 +139,11 @@ export default function Team() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
               <Users className="w-8 h-8 text-primary" />
               Team
             </h1>
@@ -159,7 +159,7 @@ export default function Team() {
         </div>
 
         {/* Team Members */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-xl font-semibold mb-4">Team Members ({members.length})</h2>
 
           <div className="space-y-3">
@@ -234,7 +234,7 @@ export default function Team() {
         </Card>
 
         {/* Roles & Permissions */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-xl font-semibold mb-4">Roles & Permissions</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

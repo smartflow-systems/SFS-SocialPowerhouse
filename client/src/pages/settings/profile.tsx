@@ -9,10 +9,10 @@ import { User, Camera } from 'lucide-react';
 export default function Profile() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
             <User className="w-8 h-8 text-primary" />
             Profile Settings
           </h1>
@@ -21,9 +21,9 @@ export default function Profile() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Profile Picture */}
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <h2 className="text-lg font-semibold mb-4">Profile Picture</h2>
             <div className="flex flex-col items-center">
               <div className="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center mb-4">
@@ -38,7 +38,7 @@ export default function Profile() {
 
           {/* Profile Form */}
           <div className="lg:col-span-2">
-            <Card className="glass-card p-6">
+            <Card className="glass-card p-4">
               <h2 className="text-lg font-semibold mb-6">Personal Information</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -83,7 +83,7 @@ export default function Profile() {
             </Card>
 
             {/* Change Password */}
-            <Card className="glass-card p-6 mt-6">
+            <Card className="glass-card p-4 mt-6">
               <h2 className="text-lg font-semibold mb-6">Change Password</h2>
               <div className="space-y-4">
                 <div>

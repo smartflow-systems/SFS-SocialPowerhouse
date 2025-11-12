@@ -77,19 +77,19 @@
 
 @layer components {
   .glass-card {
-    background: rgba(59, 47, 47, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1), inset 0 1px 0 rgba(255, 215, 0, 0.1);
-    border-radius: 12px;
+    background: rgba(59, 47, 47, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 24px rgba(255, 215, 0, 0.15), inset 0 1px 0 rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
     transition: all 0.3s ease;
   }
-  
+
   .glass-card:hover {
-    border-color: rgba(255, 215, 0, 0.4);
-    box-shadow: 0 12px 48px rgba(255, 215, 0, 0.2);
-    transform: translateY(-2px);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.25);
+    transform: translateY(-1px);
   }
 
   .circuit-bg {

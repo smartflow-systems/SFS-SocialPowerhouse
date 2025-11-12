@@ -34,6 +34,17 @@ The application uses a custom "SFS Design System" with:
 - Responsive mobile-first design
 - Toast notifications for user feedback
 - Form validation with React Hook Form and Zod schemas
+- Landing page feature cards with navigation links to app sections
+
+**Landing Page Features:**
+- Interactive feature cards in FeaturesGrid component
+- Each card links to corresponding app functionality:
+  - AI Content Generation → /ai-studio
+  - Multi-Platform Scheduling → /posts/create
+  - Analytics Dashboard → /analytics
+  - Team Collaboration → /connections/team
+  - Content Calendar → /calendar
+  - Smart Suggestions → /ai-studio
 
 ### Backend Architecture
 

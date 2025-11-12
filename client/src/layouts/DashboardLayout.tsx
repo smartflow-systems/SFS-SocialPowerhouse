@@ -52,6 +52,108 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
+    <>
+      {/* Circuit Background - Fixed to viewport */}
+      <div className="fixed inset-0 circuit-bg -z-10" />
+
+      <SidebarProvider>
+        <Sidebar collapsible="none" className="bg-sfs-black/80 backdrop-blur-sm border-r border-sfs-gold/20">
+          <SidebarHeader className="p-4 border-b border-sfs-gold/20">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-primary" />
+              <div>
+                <h2 className="font-bold text-lg text-sfs-gold">SFS PowerHouse</h2>
+              </div>
+            </div>
+          </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Main</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {mainItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton isActive={location === item.path} asChild>
+                      <Link href={item.path}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupLabel>Content</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {contentItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton isActive={location === item.path} asChild>
+                      <Link href={item.path}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupLabel>Connections</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {accountsItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton isActive={location === item.path} asChild>
+                      <Link href={item.path}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupLabel>Settings</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {settingsItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton isActive={location === item.path} asChild>
+                      <Link href={item.path}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+
+      <SidebarInset className="bg-transparent">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-sfs-gold/20 px-4 bg-sfs-black/60 backdrop-blur-md">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-sfs-gold">SFS PowerHouse</h2>
+          </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-3 p-3 md:gap-4 md:p-4">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+    </>
     <div className="min-h-screen bg-background relative">
       {/* Circuit Background */}
       <div className="circuit-bg" />

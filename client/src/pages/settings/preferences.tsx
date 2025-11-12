@@ -7,10 +7,10 @@ import { Settings } from 'lucide-react';
 export default function Preferences() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
             <Settings className="w-8 h-8 text-primary" />
             Preferences
           </h1>
@@ -20,7 +20,7 @@ export default function Preferences() {
         </div>
 
         {/* Appearance */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-lg font-semibold mb-4">Appearance</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -50,7 +50,7 @@ export default function Preferences() {
         </Card>
 
         {/* Language & Region */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-lg font-semibold mb-4">Language & Region</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -100,7 +100,7 @@ export default function Preferences() {
         </Card>
 
         {/* Content */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-lg font-semibold mb-4">Content Preferences</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ export default function Preferences() {
         </Card>
 
         {/* Privacy & Security */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-lg font-semibold mb-4">Privacy & Security</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">

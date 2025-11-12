@@ -6,10 +6,10 @@ import { Clock, Edit, Trash2 } from 'lucide-react';
 export default function ScheduledPosts() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
             <Clock className="w-8 h-8 text-primary" />
             Scheduled Posts
           </h1>
@@ -21,7 +21,7 @@ export default function ScheduledPosts() {
         {/* Scheduled Posts List */}
         <div className="space-y-4">
           {[1, 2, 3, 4, 5].map((i) => (
-            <Card key={i} className="glass-card p-6">
+            <Card key={i} className="glass-card p-4">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">

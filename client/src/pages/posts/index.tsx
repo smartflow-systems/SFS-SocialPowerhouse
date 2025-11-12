@@ -16,10 +16,10 @@ export default function PostsList() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2" data-testid="heading-posts">
+            <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2" data-testid="heading-posts">
               <FileText className="w-8 h-8 text-primary" />
               All Posts
             </h1>

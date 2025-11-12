@@ -6,11 +6,11 @@ import { Users, Plus, MoreVertical } from 'lucide-react';
 export default function TeamMembers() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
               <Users className="w-8 h-8 text-primary" />
               Team Members
             </h1>
@@ -25,7 +25,7 @@ export default function TeamMembers() {
         </div>
 
         {/* Team List */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <div className="space-y-4">
             {[
               { name: 'You', email: 'you@example.com', role: 'Owner', avatar: null },
@@ -62,7 +62,7 @@ export default function TeamMembers() {
         </Card>
 
         {/* Pending Invitations */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-lg font-semibold mb-4">Pending Invitations</h2>
           <div className="space-y-3">
             {[1, 2].map((i) => (

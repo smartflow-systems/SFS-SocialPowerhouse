@@ -99,7 +99,7 @@ export default function Register() {
         </div>
 
         {/* Register Card */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="name">Full Name</Label>

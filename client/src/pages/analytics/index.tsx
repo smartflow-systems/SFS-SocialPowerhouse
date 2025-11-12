@@ -196,16 +196,16 @@ export default function Analytics() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-3 md:space-y-4">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-              <BarChart3 className="w-8 h-8 text-primary" />
+            <h1 className="text-2xl font-bold mb-1 flex items-center gap-2 text-sfs-gold">
+              <BarChart3 className="w-6 h-6" />
               Analytics Dashboard
             </h1>
-            <p className="text-muted-foreground">
-              Track your social media performance and insights
+            <p className="text-sm text-sfs-beige/70">
+              Track your social media performance
             </p>
           </div>
 
@@ -230,25 +230,25 @@ export default function Analytics() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="glass-card p-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-muted-foreground font-medium">Total Reach</p>
-                <h3 className="text-3xl font-bold mt-2">{metrics.totalReach.toLocaleString()}</h3>
-                <p className="text-sm text-primary mt-2">
-                  {posts.length} posts published
+                <p className="text-xs text-sfs-beige/60 font-medium">Total Reach</p>
+                <h3 className="text-2xl font-bold mt-1 text-sfs-gold">{metrics.totalReach.toLocaleString()}</h3>
+                <p className="text-xs text-primary mt-1">
+                  {posts.length} posts
                 </p>
               </div>
-              <Eye className="w-8 h-8 text-primary" />
+              <Eye className="w-6 h-6 text-primary/70" />
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Total Engagement</p>
-                <h3 className="text-3xl font-bold mt-2">{metrics.totalEngagement.toLocaleString()}</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.totalEngagement.toLocaleString()}</h3>
                 <p className="text-sm text-primary mt-2">
                   {metrics.avgEngagementPerPost}/post avg
                 </p>
@@ -257,11 +257,11 @@ export default function Analytics() {
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Engagement Rate</p>
-                <h3 className="text-3xl font-bold mt-2">{metrics.engagementRate}%</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.engagementRate}%</h3>
                 <p className="text-sm text-muted-foreground mt-2">
                   Industry avg: 2.5%
                 </p>
@@ -270,11 +270,11 @@ export default function Analytics() {
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-muted-foreground font-medium">AI Generated</p>
-                <h3 className="text-3xl font-bold mt-2">{metrics.aiPercentage}%</h3>
+                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.aiPercentage}%</h3>
                 <p className="text-sm text-primary mt-2">
                   {metrics.aiPosts} of {metrics.totalPosts} posts
                 </p>
@@ -285,7 +285,7 @@ export default function Analytics() {
         </div>
 
         {/* Platform Performance */}
-        <Card className="glass-card p-6">
+        <Card className="glass-card p-4">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
             Platform Performance
@@ -336,7 +336,7 @@ export default function Analytics() {
 
         {/* Top Performing Posts */}
         {topPosts.length > 0 && (
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5" />
               Top Performing Posts
@@ -404,8 +404,8 @@ export default function Analytics() {
         )}
 
         {/* Insights */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="glass-card p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card className="glass-card p-4">
             <h2 className="text-xl font-semibold mb-4">Key Insights</h2>
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
@@ -448,7 +448,7 @@ export default function Analytics() {
             </div>
           </Card>
 
-          <Card className="glass-card p-6">
+          <Card className="glass-card p-4">
             <h2 className="text-xl font-semibold mb-4">Recommendations</h2>
             <div className="space-y-3">
               <div className="p-3 rounded-lg border border-border">

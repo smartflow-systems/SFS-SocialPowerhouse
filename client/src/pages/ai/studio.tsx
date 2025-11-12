@@ -408,10 +408,10 @@ export default function AIStudio() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold text-sfs-gold mb-2 flex items-center gap-2">
             <Sparkles className="w-8 h-8" />
             AI Content Studio
           </h1>
@@ -420,9 +420,9 @@ export default function AIStudio() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Input Section */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <GlassCard className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-sfs-gold">Content Brief</h2>
@@ -578,7 +578,7 @@ export default function AIStudio() {
           </div>
 
           {/* Output Section */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <GlassCard className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-sfs-gold">Generated Content</h2>
