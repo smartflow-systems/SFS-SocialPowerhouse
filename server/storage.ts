@@ -2,8 +2,12 @@ import { type User, type InsertUser, type Post, type AITemplate, users, posts, a
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
 import { drizzle } from "drizzle-orm/neon-serverless";
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { eq, and, gte, lte, sql as sqlDrizzle, or } from "drizzle-orm";
+import ws from "ws";
+
+// Configure Neon to use WebSocket for Node.js
+neonConfig.webSocketConstructor = ws;
 
 // modify the interface with any CRUD methods
 // you might need
