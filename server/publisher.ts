@@ -273,28 +273,23 @@ export async function processScheduledPosts(): Promise<void> {
   console.log('[Publisher] Checking for scheduled posts...');
 
   try {
-    // Get all scheduled posts
-    const allUsers = Array.from((storage as any).users.keys()) as string[];
+    // Get all scheduled posts that are due for publishing
+    const duePosts = await storage.getScheduledPostsDue();
 
-    for (const userId of allUsers) {
-      const posts = await storage.getUserPosts(userId, { status: 'scheduled' });
+    if (duePosts.length === 0) {
+      console.log('[Publisher] No posts due for publishing');
+      return;
+    }
 
-      for (const post of posts) {
-        if (!post.scheduledAt) continue;
+    console.log(`[Publisher] Found ${duePosts.length} post(s) due for publishing`);
 
-        const now = new Date();
-        const scheduledTime = new Date(post.scheduledAt);
+    for (const post of duePosts) {
+      console.log(`[Publisher] Publishing post ${post.id} scheduled for ${post.scheduledAt?.toISOString()}`);
 
-        // Check if post is ready to publish (scheduled time has passed)
-        if (scheduledTime <= now) {
-          console.log(`[Publisher] Publishing post ${post.id} scheduled for ${scheduledTime.toISOString()}`);
-
-          try {
-            await publishPost(post);
-          } catch (error) {
-            console.error(`[Publisher] Failed to publish post ${post.id}:`, error);
-          }
-        }
+      try {
+        await publishPost(post);
+      } catch (error) {
+        console.error(`[Publisher] Failed to publish post ${post.id}:`, error);
       }
     }
   } catch (error) {

@@ -16,6 +16,7 @@ import Analytics from "@/pages/analytics/index";
 import ContentLibrary from "@/pages/content-library/index";
 
 // Content Pages
+import PostsList from "@/pages/posts/index";
 import CreatePost from "@/pages/posts/create";
 import ScheduledPosts from "@/pages/posts/scheduled";
 import Drafts from "@/pages/posts/drafts";
@@ -59,6 +60,7 @@ function Router() {
       <Route path="/ai/generator" component={AIStudio} />
 
       {/* Content Routes */}
+      <Route path="/posts" component={PostsList} />
       <Route path="/posts/create" component={CreatePost} />
       <Route path="/posts/scheduled" component={ScheduledPosts} />
       <Route path="/posts/drafts" component={Drafts} />

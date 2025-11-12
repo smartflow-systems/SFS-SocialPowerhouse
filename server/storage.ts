@@ -1,6 +1,14 @@
+import { type User, type InsertUser, type Post, type AITemplate, users, posts, aiTemplates } from "@shared/schema";
 import { type User, type InsertUser, type Post, type AITemplate, type PostComment } from "@shared/schema";
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { eq, and, gte, lte, sql as sqlDrizzle, or } from "drizzle-orm";
+import ws from "ws";
+
+// Configure Neon to use WebSocket for Node.js
+neonConfig.webSocketConstructor = ws;
 
 // modify the interface with any CRUD methods
 // you might need
@@ -41,6 +49,7 @@ export interface IStorage {
     startDate?: Date;
     endDate?: Date;
   }): Promise<Post[]>;
+  getScheduledPostsDue(): Promise<Post[]>;
   createPost(post: InsertPost): Promise<Post>;
   updatePost(id: string, updates: Partial<InsertPost>): Promise<Post | undefined>;
   deletePost(id: string): Promise<boolean>;
@@ -57,6 +66,194 @@ export interface IStorage {
   getPostComments(postId: string): Promise<PostComment[]>;
   createComment(postId: string, userId: string, comment: string): Promise<PostComment>;
   deleteComment(id: string): Promise<boolean>;
+}
+
+// PostgreSQL Database Storage Implementation
+export class DbStorage implements IStorage {
+  private db;
+
+  constructor() {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is required");
+    }
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    this.db = drizzle(pool);
+  }
+
+  // User methods
+  async getUser(id: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.username, username)).limit(1);
+    return result[0];
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.email, email)).limit(1);
+    return result[0];
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(insertUser.password, 10);
+    const result = await this.db.insert(users).values({
+      username: insertUser.username,
+      email: insertUser.email,
+      password: hashedPassword,
+    }).returning();
+    return result[0];
+  }
+
+  // Post methods
+  async getPost(id: string): Promise<Post | undefined> {
+    const result = await this.db.select().from(posts).where(eq(posts.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserPosts(
+    userId: string,
+    filters?: {
+      status?: string;
+      platform?: string;
+      startDate?: Date;
+      endDate?: Date;
+    }
+  ): Promise<Post[]> {
+    const conditions = [eq(posts.userId, userId)];
+
+    if (filters?.status) {
+      conditions.push(eq(posts.status, filters.status));
+    }
+
+    if (filters?.startDate) {
+      conditions.push(gte(posts.scheduledAt, filters.startDate));
+    }
+
+    if (filters?.endDate) {
+      conditions.push(lte(posts.scheduledAt, filters.endDate));
+    }
+
+    let query = this.db.select().from(posts);
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
+    }
+
+    const result = await query.orderBy(posts.scheduledAt);
+
+    // Filter by platform if needed (JSONB array check)
+    if (filters?.platform) {
+      return result.filter((post) => 
+        post.platforms && post.platforms.includes(filters.platform!)
+      );
+    }
+
+    return result;
+  }
+
+  async getScheduledPostsDue(): Promise<Post[]> {
+    const now = new Date();
+    const result = await this.db.select()
+      .from(posts)
+      .where(
+        and(
+          eq(posts.status, 'scheduled'),
+          lte(posts.scheduledAt, now)
+        )
+      )
+      .orderBy(posts.scheduledAt);
+    return result;
+  }
+
+  async createPost(insertPost: InsertPost): Promise<Post> {
+    const result = await this.db.insert(posts).values({
+      userId: insertPost.userId,
+      content: insertPost.content,
+      platforms: insertPost.platforms,
+      mediaUrls: insertPost.mediaUrls || null,
+      scheduledAt: insertPost.scheduledAt || null,
+      publishedAt: insertPost.publishedAt || null,
+      status: insertPost.status || 'draft',
+      aiGenerated: insertPost.aiGenerated || false,
+      tone: insertPost.tone || null,
+      hashtags: insertPost.hashtags || null,
+    }).returning();
+    return result[0];
+  }
+
+  async updatePost(id: string, updates: Partial<InsertPost>): Promise<Post | undefined> {
+    const result = await this.db.update(posts)
+      .set({ 
+        ...updates,
+        updatedAt: new Date()
+      })
+      .where(eq(posts.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deletePost(id: string): Promise<boolean> {
+    const result = await this.db.delete(posts).where(eq(posts.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Template methods
+  async getTemplate(id: string): Promise<AITemplate | undefined> {
+    const result = await this.db.select().from(aiTemplates).where(eq(aiTemplates.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getUserTemplates(userId: string): Promise<AITemplate[]> {
+    const result = await this.db.select()
+      .from(aiTemplates)
+      .where(
+        or(
+          eq(aiTemplates.userId, userId),
+          eq(aiTemplates.isPublic, true)
+        )
+      )
+      .orderBy(aiTemplates.usageCount);
+    return result;
+  }
+
+  async createTemplate(insertTemplate: InsertAITemplate): Promise<AITemplate> {
+    const result = await this.db.insert(aiTemplates).values({
+      userId: insertTemplate.userId,
+      name: insertTemplate.name,
+      prompt: insertTemplate.prompt,
+      tone: insertTemplate.tone,
+      category: insertTemplate.category || null,
+      isPublic: insertTemplate.isPublic || false,
+    }).returning();
+    return result[0];
+  }
+
+  async updateTemplate(id: string, updates: Partial<InsertAITemplate>): Promise<AITemplate | undefined> {
+    const result = await this.db.update(aiTemplates)
+      .set({ 
+        ...updates,
+        updatedAt: new Date()
+      })
+      .where(eq(aiTemplates.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteTemplate(id: string): Promise<boolean> {
+    const result = await this.db.delete(aiTemplates).where(eq(aiTemplates.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async incrementTemplateUsage(id: string): Promise<void> {
+    await this.db.update(aiTemplates)
+      .set({ 
+        usageCount: sqlDrizzle`${aiTemplates.usageCount} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(aiTemplates.id, id));
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -153,6 +350,21 @@ export class MemStorage implements IStorage {
       const bTime = b.scheduledAt?.getTime() || b.createdAt?.getTime() || 0;
       return aTime - bTime;
     });
+  }
+
+  async getScheduledPostsDue(): Promise<Post[]> {
+    const now = new Date();
+    return Array.from(this.posts.values())
+      .filter((post) => 
+        post.status === 'scheduled' && 
+        post.scheduledAt && 
+        post.scheduledAt <= now
+      )
+      .sort((a, b) => {
+        const aTime = a.scheduledAt?.getTime() || 0;
+        const bTime = b.scheduledAt?.getTime() || 0;
+        return aTime - bTime;
+      });
   }
 
   async createPost(insertPost: InsertPost): Promise<Post> {
@@ -293,4 +505,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DbStorage();

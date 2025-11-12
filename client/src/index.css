@@ -4,14 +4,70 @@
 
 @layer base {
   :root {
-    --background: 13 13 13;
-    --foreground: 245 245 220;
-    --card: 59 47 47;
-    --card-foreground: 245 245 220;
-    --primary: 255 215 0;
-    --primary-foreground: 13 13 13;
-    --border: 255 215 0 / 0.3;
-    --ring: 255 215 0;
+    /* Base colors - SFS Black & Beige */
+    --background: 0 0% 5%;
+    --foreground: 60 29% 92%;
+    
+    /* Card colors - SFS Brown with slight variations */
+    --card: 0 11% 21%;
+    --card-foreground: 60 29% 92%;
+    --card-border: 51 100% 50%;
+    
+    /* Popover */
+    --popover: 0 11% 21%;
+    --popover-foreground: 60 29% 92%;
+    --popover-border: 51 100% 50%;
+    
+    /* Primary - SFS Gold */
+    --primary: 51 100% 50%;
+    --primary-foreground: 0 0% 5%;
+    --primary-border: 51 100% 50%;
+    
+    /* Secondary */
+    --secondary: 0 11% 21%;
+    --secondary-foreground: 60 29% 92%;
+    --secondary-border: 0 11% 30%;
+    
+    /* Muted */
+    --muted: 0 11% 15%;
+    --muted-foreground: 60 15% 70%;
+    --muted-border: 0 11% 25%;
+    
+    /* Accent - Lighter gold variation */
+    --accent: 51 100% 60%;
+    --accent-foreground: 0 0% 5%;
+    --accent-border: 51 100% 60%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 60 29% 92%;
+    --destructive-border: 0 84% 60%;
+    
+    /* Input & Border */
+    --input: 0 11% 21%;
+    --border: 51 100% 50%;
+    --ring: 51 100% 50%;
+    
+    /* Chart colors */
+    --chart-1: 51 100% 50%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    
+    /* Sidebar colors */
+    --sidebar: 0 11% 18%;
+    --sidebar-foreground: 60 29% 92%;
+    --sidebar-border: 0 11% 25%;
+    --sidebar-ring: 51 100% 50%;
+    
+    --sidebar-primary: 51 100% 50%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-primary-border: 51 100% 50%;
+    
+    --sidebar-accent: 51 100% 60%;
+    --sidebar-accent-foreground: 0 0% 5%;
+    --sidebar-accent-border: 51 100% 60%;
   }
   
   body {
