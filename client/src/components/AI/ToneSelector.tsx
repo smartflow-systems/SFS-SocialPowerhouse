@@ -1,6 +1,5 @@
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import GlassCard from '@/components/Glass/GlassCard';
 
 const TONES = [
   { id: 'professional', label: 'Professional', emoji: '💼', description: 'Formal and business-like' },
@@ -23,7 +22,7 @@ interface ToneSelectorProps {
 export default function ToneSelector({ selectedTone, onToneChange }: ToneSelectorProps) {
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-sfs-gold">Select Tone</h3>
+      <h3 className="text-sm font-semibold text-primary">Select Tone</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {TONES.map((tone) => (
           <button
@@ -31,22 +30,27 @@ export default function ToneSelector({ selectedTone, onToneChange }: ToneSelecto
             onClick={() => onToneChange(tone.id)}
             className={cn(
               "relative p-3 rounded-lg border-2 transition-all text-left",
-              "hover:border-sfs-gold/60 hover:bg-sfs-gold/5",
+              "backdrop-filter backdrop-blur-lg",
+              "hover:border-primary/60 hover:shadow-lg hover:shadow-primary/20",
               selectedTone === tone.id
-                ? "border-sfs-gold bg-sfs-gold/10"
-                : "border-sfs-gold/20 bg-sfs-brown/5"
+                ? "border-primary bg-primary/10 shadow-lg shadow-primary/20"
+                : "border-primary/20 bg-[#3B2F2F]/30"
             )}
+            style={{
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+            }}
           >
             {selectedTone === tone.id && (
               <div className="absolute top-2 right-2">
-                <div className="w-5 h-5 bg-sfs-gold rounded-full flex items-center justify-center">
-                  <Check className="w-3 h-3 text-sfs-black" />
+                <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                  <Check className="w-3 h-3 text-black" />
                 </div>
               </div>
             )}
             <div className="text-2xl mb-1">{tone.emoji}</div>
-            <div className="text-sm font-semibold text-sfs-gold">{tone.label}</div>
-            <div className="text-xs text-sfs-beige/60 mt-1">{tone.description}</div>
+            <div className="text-sm font-semibold text-primary">{tone.label}</div>
+            <div className="text-xs text-muted-foreground mt-1">{tone.description}</div>
           </button>
         ))}
       </div>
