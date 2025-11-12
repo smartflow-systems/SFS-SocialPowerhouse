@@ -11,6 +11,13 @@ export default {
         sm: ".1875rem", /* 3px */
       },
       colors: {
+        // SFS Brand Colors
+        'sfs-black': '#0D0D0D',
+        'sfs-brown': '#3B2F2F',
+        'sfs-gold': '#FFD700',
+        'sfs-gold-hover': '#E6C200',
+        'sfs-beige': '#F5F5DC',
+
         // Flat / base colors (regular buttons)
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
@@ -96,10 +103,33 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "circuit-flow": {
+          "0%": { backgroundPosition: "0% 0%" },
+          "100%": { backgroundPosition: "100% 100%" },
+        },
+        "pulse-gold": {
+          "0%, 100%": { opacity: "1", boxShadow: "0 0 20px rgba(255, 215, 0, 0.5)" },
+          "50%": { opacity: "0.8", boxShadow: "0 0 40px rgba(255, 215, 0, 0.8)" },
+        },
+        "shimmer": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "circuit-flow": "circuit-flow 20s linear infinite",
+        "pulse-gold": "pulse-gold 2s ease-in-out infinite",
+        "shimmer": "shimmer 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+      },
+      backdropBlur: {
+        xs: '2px',
       },
     },
   },
