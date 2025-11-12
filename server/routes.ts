@@ -595,6 +595,234 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Approval Workflow Routes
+  // Request approval for a post
+  app.post("/api/posts/:id/request-approval", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { id } = req.params;
+
+      const post = await storage.getPost(id);
+      if (!post) {
+        return res.status(404).json({
+          error: "Post not found",
+          message: "The requested post does not exist"
+        });
+      }
+
+      if (post.userId !== user.id) {
+        return res.status(403).json({
+          error: "Access denied",
+          message: "You do not have permission to modify this post"
+        });
+      }
+
+      const updatedPost = await storage.updatePost(id, {
+        status: 'pending_approval',
+        //@ts-ignore
+        approvalStatus: 'pending',
+      });
+
+      res.json({
+        message: "Approval requested successfully",
+        post: updatedPost,
+      });
+    } catch (error: any) {
+      console.error("Error requesting approval:", error);
+      res.status(500).json({
+        error: "Failed to request approval",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Approve a post
+  app.post("/api/posts/:id/approve", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { id } = req.params;
+
+      const post = await storage.getPost(id);
+      if (!post) {
+        return res.status(404).json({
+          error: "Post not found",
+          message: "The requested post does not exist"
+        });
+      }
+
+      const updatedPost = await storage.updatePost(id, {
+        //@ts-ignore
+        approvalStatus: 'approved',
+        //@ts-ignore
+        approvedBy: user.id,
+        //@ts-ignore
+        approvedAt: new Date(),
+        status: 'scheduled', // Move to scheduled after approval
+      });
+
+      res.json({
+        message: "Post approved successfully",
+        post: updatedPost,
+      });
+    } catch (error: any) {
+      console.error("Error approving post:", error);
+      res.status(500).json({
+        error: "Failed to approve post",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Reject a post
+  app.post("/api/posts/:id/reject", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { id } = req.params;
+      const { reason } = req.body;
+
+      const post = await storage.getPost(id);
+      if (!post) {
+        return res.status(404).json({
+          error: "Post not found",
+          message: "The requested post does not exist"
+        });
+      }
+
+      const updatedPost = await storage.updatePost(id, {
+        //@ts-ignore
+        approvalStatus: 'rejected',
+        //@ts-ignore
+        approvedBy: user.id,
+        //@ts-ignore
+        approvedAt: new Date(),
+        //@ts-ignore
+        rejectionReason: reason || 'No reason provided',
+        status: 'draft', // Move back to draft after rejection
+      });
+
+      res.json({
+        message: "Post rejected",
+        post: updatedPost,
+      });
+    } catch (error: any) {
+      console.error("Error rejecting post:", error);
+      res.status(500).json({
+        error: "Failed to reject post",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Get comments for a post
+  app.get("/api/posts/:id/comments", requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const post = await storage.getPost(id);
+      if (!post) {
+        return res.status(404).json({
+          error: "Post not found",
+          message: "The requested post does not exist"
+        });
+      }
+
+      const comments = await storage.getPostComments(id);
+
+      // Fetch user details for each comment
+      const commentsWithUsers = await Promise.all(
+        comments.map(async (comment) => {
+          const commentUser = await storage.getUser(comment.userId);
+          return {
+            ...comment,
+            user: commentUser ? {
+              id: commentUser.id,
+              name: commentUser.name,
+              username: commentUser.username,
+              avatar: commentUser.avatar,
+            } : null,
+          };
+        })
+      );
+
+      res.json({ comments: commentsWithUsers });
+    } catch (error: any) {
+      console.error("Error fetching comments:", error);
+      res.status(500).json({
+        error: "Failed to fetch comments",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Add a comment to a post
+  app.post("/api/posts/:id/comments", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { id } = req.params;
+      const { comment } = req.body;
+
+      if (!comment || !comment.trim()) {
+        return res.status(400).json({
+          error: "Missing comment",
+          message: "Comment text is required"
+        });
+      }
+
+      const post = await storage.getPost(id);
+      if (!post) {
+        return res.status(404).json({
+          error: "Post not found",
+          message: "The requested post does not exist"
+        });
+      }
+
+      const newComment = await storage.createComment(id, user.id, comment);
+
+      res.json({
+        message: "Comment added successfully",
+        comment: {
+          ...newComment,
+          user: {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            avatar: user.avatar,
+          },
+        },
+      });
+    } catch (error: any) {
+      console.error("Error adding comment:", error);
+      res.status(500).json({
+        error: "Failed to add comment",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Delete a comment
+  app.delete("/api/comments/:id", requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const success = await storage.deleteComment(id);
+
+      if (!success) {
+        return res.status(404).json({
+          error: "Comment not found",
+          message: "The requested comment does not exist"
+        });
+      }
+
+      res.json({ message: "Comment deleted successfully" });
+    } catch (error: any) {
+      console.error("Error deleting comment:", error);
+      res.status(500).json({
+        error: "Failed to delete comment",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
   // Smart Suggestions API
   app.post("/api/suggestions", requireAuth, async (req, res) => {
     try {

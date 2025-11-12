@@ -42,10 +42,24 @@ export const posts = pgTable("posts", {
   mediaUrls: jsonb("media_urls").$type<string[]>(), // Images/videos
   scheduledAt: timestamp("scheduled_at"),
   publishedAt: timestamp("published_at"),
-  status: text("status").default('draft'), // draft, scheduled, published, failed
+  status: text("status").default('draft'), // draft, scheduled, published, failed, pending_approval
+  approvalStatus: text("approval_status"), // pending, approved, rejected, changes_requested
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
+  rejectionReason: text("rejection_reason"),
   aiGenerated: boolean("ai_generated").default(false),
   tone: text("tone"), // professional, casual, witty, etc.
   hashtags: jsonb("hashtags").$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Post Comments (for approval workflows and team collaboration)
+export const postComments = pgTable("post_comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  postId: varchar("post_id").notNull().references(() => posts.id, { onDelete: 'cascade' }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  comment: text("comment").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -141,11 +155,13 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts);
 export const insertPostSchema = createInsertSchema(posts);
 export const insertAITemplateSchema = createInsertSchema(aiTemplates);
+export const insertPostCommentSchema = createInsertSchema(postComments);
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type SocialAccount = typeof socialAccounts.$inferSelect;
 export type Post = typeof posts.$inferSelect;
+export type PostComment = typeof postComments.$inferSelect;
 export type AITemplate = typeof aiTemplates.$inferSelect;
 export type AnalyticsSnapshot = typeof analyticsSnapshots.$inferSelect;
 export type TeamMember = typeof teamMembers.$inferSelect;

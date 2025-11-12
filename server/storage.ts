@@ -1,4 +1,5 @@
 import { type User, type InsertUser, type Post, type AITemplate, users, posts, aiTemplates } from "@shared/schema";
+import { type User, type InsertUser, type Post, type AITemplate, type PostComment } from "@shared/schema";
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
 import { drizzle } from "drizzle-orm/neon-serverless";
@@ -60,6 +61,11 @@ export interface IStorage {
   updateTemplate(id: string, updates: Partial<InsertAITemplate>): Promise<AITemplate | undefined>;
   deleteTemplate(id: string): Promise<boolean>;
   incrementTemplateUsage(id: string): Promise<void>;
+
+  // Comment methods
+  getPostComments(postId: string): Promise<PostComment[]>;
+  createComment(postId: string, userId: string, comment: string): Promise<PostComment>;
+  deleteComment(id: string): Promise<boolean>;
 }
 
 // PostgreSQL Database Storage Implementation
@@ -254,11 +260,13 @@ export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private posts: Map<string, Post>;
   private templates: Map<string, AITemplate>;
+  private comments: Map<string, PostComment>;
 
   constructor() {
     this.users = new Map();
     this.posts = new Map();
     this.templates = new Map();
+    this.comments = new Map();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -371,6 +379,10 @@ export class MemStorage implements IStorage {
       scheduledAt: insertPost.scheduledAt || null,
       publishedAt: insertPost.publishedAt || null,
       status: insertPost.status || 'draft',
+      approvalStatus: null,
+      approvedBy: null,
+      approvedAt: null,
+      rejectionReason: null,
       aiGenerated: insertPost.aiGenerated || false,
       tone: insertPost.tone || null,
       hashtags: insertPost.hashtags || null,
@@ -464,6 +476,32 @@ export class MemStorage implements IStorage {
       template.updatedAt = new Date();
       this.templates.set(id, template);
     }
+  }
+
+  // Comment methods
+  async getPostComments(postId: string): Promise<PostComment[]> {
+    return Array.from(this.comments.values())
+      .filter((comment) => comment.postId === postId)
+      .sort((a, b) => a.createdAt!.getTime() - b.createdAt!.getTime()); // Oldest first
+  }
+
+  async createComment(postId: string, userId: string, comment: string): Promise<PostComment> {
+    const id = randomUUID();
+    const now = new Date();
+    const newComment: PostComment = {
+      id,
+      postId,
+      userId,
+      comment,
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.comments.set(id, newComment);
+    return newComment;
+  }
+
+  async deleteComment(id: string): Promise<boolean> {
+    return this.comments.delete(id);
   }
 }
 
