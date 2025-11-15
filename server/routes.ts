@@ -16,6 +16,18 @@ import {
   validatePlatformConfig
 } from "./oauth";
 import { randomBytes } from "crypto";
+import {
+  optimizeContent,
+  suggestNextBestTimes,
+  getBestTimesForPlatform,
+  generateTrendingHashtags,
+  analyzeSentiment
+} from "./ai-optimizer";
+import {
+  getUserAnalytics,
+  calculateGrowth,
+  getPlatformInsights
+} from "./analytics";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication Routes
@@ -872,6 +884,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error fetching platform tips:", error);
       res.status(500).json({
         error: "Failed to fetch platform tips",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // ==========================================
+  // ANALYTICS & INSIGHTS ROUTES
+  // ==========================================
+
+  // Get comprehensive analytics dashboard
+  app.get("/api/analytics/dashboard", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const days = parseInt(req.query.days as string) || 30;
+
+      const dashboard = await getUserAnalytics(user.id, days);
+
+      res.json(dashboard);
+    } catch (error: any) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({
+        error: "Failed to fetch analytics",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Get platform-specific insights
+  app.get("/api/analytics/platform/:platform", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { platform } = req.params;
+
+      const posts = await storage.getUserPosts(user.id);
+      const insights = getPlatformInsights(platform, posts);
+
+      res.json({ platform, insights });
+    } catch (error: any) {
+      console.error("Error fetching platform insights:", error);
+      res.status(500).json({
+        error: "Failed to fetch insights",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // ==========================================
+  // AI-POWERED OPTIMIZATION ROUTES
+  // ==========================================
+
+  // Optimize content with AI
+  app.post("/api/ai/optimize-content", requireAuth, async (req, res) => {
+    try {
+      const { content, platform, tone } = req.body;
+
+      if (!content || !platform) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          message: "Content and platform are required"
+        });
+      }
+
+      const optimized = await optimizeContent(content, platform, tone);
+
+      res.json(optimized);
+    } catch (error: any) {
+      console.error("Error optimizing content:", error);
+      res.status(500).json({
+        error: "Failed to optimize content",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Get best posting times for platform
+  app.get("/api/ai/best-times/:platform", requireAuth, async (req, res) => {
+    try {
+      const { platform } = req.params;
+      const count = parseInt(req.query.count as string) || 7;
+
+      const bestTimes = getBestTimesForPlatform(platform);
+      const suggestions = suggestNextBestTimes(platform, count);
+
+      res.json({ platform, bestTimes, suggestions });
+    } catch (error: any) {
+      console.error("Error fetching best times:", error);
+      res.status(500).json({
+        error: "Failed to fetch best times",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Generate trending hashtags
+  app.post("/api/ai/hashtags", requireAuth, async (req, res) => {
+    try {
+      const { topic, platform, count } = req.body;
+
+      if (!topic || !platform) {
+        return res.status(400).json({
+          error: "Missing required fields",
+          message: "Topic and platform are required"
+        });
+      }
+
+      const hashtags = await generateTrendingHashtags(topic, platform, count || 10);
+
+      res.json({ hashtags });
+    } catch (error: any) {
+      console.error("Error generating hashtags:", error);
+      res.status(500).json({
+        error: "Failed to generate hashtags",
+        message: error.message || "An error occurred"
+      });
+    }
+  });
+
+  // Analyze content sentiment
+  app.post("/api/ai/sentiment", requireAuth, async (req, res) => {
+    try {
+      const { content } = req.body;
+
+      if (!content) {
+        return res.status(400).json({
+          error: "Missing required field",
+          message: "Content is required"
+        });
+      }
+
+      const sentiment = await analyzeSentiment(content);
+
+      res.json(sentiment);
+    } catch (error: any) {
+      console.error("Error analyzing sentiment:", error);
+      res.status(500).json({
+        error: "Failed to analyze sentiment",
         message: error.message || "An error occurred"
       });
     }
