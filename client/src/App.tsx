@@ -14,6 +14,13 @@ import Register from "@/pages/auth/register";
 import Calendar from "@/pages/calendar/index";
 import Analytics from "@/pages/analytics/index";
 import ContentLibrary from "@/pages/content-library/index";
+import LiveDashboard from "@/pages/live-dashboard/index";
+import GrowthTools from "@/pages/growth-tools/index";
+import SocialInbox from "@/pages/social-inbox/index";
+import SocialListening from "@/pages/social-listening/index";
+import CompetitorIntelligence from "@/pages/competitor-intelligence/index";
+import AIVisualCreator from "@/pages/ai-visual-creator/index";
+import AutomationRules from "@/pages/automation-rules/index";
 
 // Content Pages
 import PostsList from "@/pages/posts/index";
@@ -49,6 +56,13 @@ function Router() {
       <Route path="/calendar" component={Calendar} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/content-library" component={ContentLibrary} />
+      <Route path="/live-dashboard" component={LiveDashboard} />
+      <Route path="/growth-tools" component={GrowthTools} />
+      <Route path="/social-inbox" component={SocialInbox} />
+      <Route path="/social-listening" component={SocialListening} />
+      <Route path="/competitor-intelligence" component={CompetitorIntelligence} />
+      <Route path="/ai-visual-creator" component={AIVisualCreator} />
+      <Route path="/automation" component={AutomationRules} />
 
       {/* AI Studio Routes */}
       <Route path="/ai-studio" component={AIStudio} />

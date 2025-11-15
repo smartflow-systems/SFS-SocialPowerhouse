@@ -14,12 +14,14 @@ import {
 } from '@/components/ui/sidebar';
 import {
   Home, Sparkles, Calendar, BarChart3, Users, Settings,
-  Zap, Bell, CreditCard, HelpCircle, FileText, Globe, CheckCircle
+  Zap, Bell, CreditCard, HelpCircle, FileText, Globe, CheckCircle, Activity, TrendingUp, Inbox, Ear, Target, Wand2
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 
 const mainItems = [
   { icon: Home, label: "Dashboard", path: "/dashboard" },
+  { icon: Activity, label: "Live Dashboard", path: "/live-dashboard" },
+  { icon: Inbox, label: "Social Inbox", path: "/social-inbox" },
   { icon: Sparkles, label: "AI Studio", path: "/ai-studio" },
   { icon: Calendar, label: "Calendar", path: "/calendar" },
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
@@ -27,12 +29,16 @@ const mainItems = [
 
 const contentItems = [
   { icon: Sparkles, label: "AI Generator", path: "/ai/generator" },
+  { icon: Wand2, label: "Visual Creator", path: "/ai-visual-creator" },
   { icon: FileText, label: "Templates", path: "/templates" },
   { icon: Calendar, label: "Scheduler", path: "/scheduler" },
 ];
 
 const accountsItems = [
   { icon: Globe, label: "Social Accounts", path: "/accounts" },
+  { icon: TrendingUp, label: "Growth Tools", path: "/growth-tools" },
+  { icon: Ear, label: "Social Listening", path: "/social-listening" },
+  { icon: Target, label: "Competitors", path: "/competitor-intelligence" },
   { icon: Zap, label: "Automation", path: "/automation" },
   { icon: Bell, label: "Alerts", path: "/alerts" },
 ];
