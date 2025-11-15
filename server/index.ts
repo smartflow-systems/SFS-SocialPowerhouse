@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupAuth } from "./auth";
 import { startPublisher } from "./publisher";
+import { startTokenRefreshJob } from "./token-refresher";
 
 const app = express();
 
@@ -85,5 +86,8 @@ app.use((req, res, next) => {
 
     // Start the background publisher for scheduled posts
     startPublisher();
+
+    // Start the background token refresher (runs every 6 hours)
+    startTokenRefreshJob(6);
   });
 })();
