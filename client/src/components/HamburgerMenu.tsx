@@ -6,7 +6,7 @@
  */
 
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import {
   Menu,
   X,
@@ -208,10 +208,12 @@ export default function HamburgerMenu({ className }: HamburgerMenuProps) {
                     const Icon = item.icon;
                     const active = isActive(item.href);
                     return (
-                      <Link
+                      <a
                         key={item.id}
                         href={item.href}
-                        onClick={handleLinkClick}
+                        onClick={(e) => {
+                          handleLinkClick();
+                        }}
                         className={cn(
                           "flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all group relative overflow-hidden",
                           active
@@ -227,7 +229,7 @@ export default function HamburgerMenu({ className }: HamburgerMenuProps) {
                             {item.badge}
                           </span>
                         )}
-                      </Link>
+                      </a>
                     );
                   })}
                 </div>
