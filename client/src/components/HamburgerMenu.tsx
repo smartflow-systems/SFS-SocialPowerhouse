@@ -41,79 +41,51 @@ const menuSections: MenuSection[] = [
       { id: "ai-studio", label: "AI Studio", href: "/ai-studio", icon: Sparkles },
       { id: "calendar", label: "Content Calendar", href: "/calendar", icon: Calendar },
       { id: "analytics", label: "Analytics", href: "/analytics", icon: BarChart3 },
+      { id: "posts", label: "Posts", href: "/posts", icon: FileText },
+      { id: "scheduler", label: "Scheduler", href: "/scheduler", icon: Calendar },
     ]
   },
   {
-    title: "CONTENT CREATION",
+    title: "CONTENT & TOOLS",
     items: [
       { id: "ai-generator", label: "AI Generator", href: "/ai/generator", icon: Bot },
-      { id: "captions", label: "Caption Writer", href: "/ai/captions", icon: FileText },
-      { id: "hashtags", label: "Hashtag Research", href: "/ai/hashtags", icon: Hash },
-      { id: "design", label: "Design Studio", href: "/design", icon: Palette },
-      { id: "video", label: "Video Clipper", href: "/video/clipper", icon: Video },
-      { id: "repurpose", label: "Content Repurpose", href: "/repurpose", icon: Layers },
-      { id: "templates", label: "Templates Library", href: "/templates", icon: FileText },
+      { id: "templates", label: "Templates", href: "/templates", icon: FileText },
+      { id: "content-library", label: "Content Library", href: "/content-library", icon: Palette },
+      { id: "ai-visual", label: "Visual Creator", href: "/ai-visual-creator", icon: Palette },
     ]
   },
   {
-    title: "PUBLISHING",
+    title: "ENGAGEMENT",
     items: [
-      { id: "scheduler", label: "Scheduler", href: "/scheduler", icon: Calendar },
-      { id: "queue", label: "Queue Manager", href: "/queue", icon: Layers },
-      { id: "bulk-publish", label: "Bulk Publisher", href: "/bulk-publish", icon: Share2 },
-      { id: "cross-post", label: "Cross-Posting", href: "/cross-post", icon: Globe },
-      { id: "link-bio", label: "Link in Bio", href: "/link-bio", icon: Link2 },
+      { id: "social-inbox", label: "Social Inbox", href: "/social-inbox", icon: Mail },
+      { id: "social-listening", label: "Social Listening", href: "/social-listening", icon: Gauge },
+      { id: "live-dashboard", label: "Live Dashboard", href: "/live-dashboard", icon: TrendingUp },
+      { id: "competitor", label: "Competitor Intel", href: "/competitor-intelligence", icon: Target },
     ]
   },
   {
-    title: "SOCIAL ACCOUNTS",
+    title: "CONNECTIONS",
     items: [
-      { id: "facebook", label: "Facebook Pages", href: "/accounts/facebook", icon: Globe },
-      { id: "instagram", label: "Instagram", href: "/accounts/instagram", icon: Globe },
-      { id: "twitter", label: "Twitter/X", href: "/accounts/twitter", icon: Globe },
-      { id: "linkedin", label: "LinkedIn", href: "/accounts/linkedin", icon: Globe },
-      { id: "tiktok", label: "TikTok", href: "/accounts/tiktok", icon: Globe },
-      { id: "youtube", label: "YouTube", href: "/accounts/youtube", icon: Globe },
-      { id: "pinterest", label: "Pinterest", href: "/accounts/pinterest", icon: Globe },
+      { id: "social-accounts", label: "Social Accounts", href: "/connections/social-accounts", icon: Globe },
+      { id: "integrations", label: "Integrations", href: "/connections/integrations", icon: Layers },
+      { id: "automation", label: "Automation", href: "/connections/automation", icon: Zap },
+      { id: "alerts", label: "Alerts", href: "/connections/alerts", icon: Bell },
     ]
   },
   {
-    title: "AUTOMATION",
-    items: [
-      { id: "responder", label: "Auto-Responder", href: "/automation/responder", icon: Zap },
-      { id: "dms", label: "DM Automation", href: "/automation/dms", icon: MessageSquare },
-      { id: "rss", label: "RSS to Social", href: "/automation/rss", icon: FileText },
-      { id: "contests", label: "Contest Runner", href: "/automation/contests", icon: Trophy },
-      { id: "email", label: "Email to Post", href: "/automation/email", icon: Mail },
-    ]
-  },
-  {
-    title: "INTELLIGENCE",
-    items: [
-      { id: "competitors", label: "Competitor Tracker", href: "/competitors", icon: Target },
-      { id: "trends", label: "Trend Predictor", href: "/trends", icon: TrendingUp },
-      { id: "performance", label: "Performance Score", href: "/performance", icon: Gauge },
-      { id: "roi", label: "ROI Calculator", href: "/roi", icon: BarChart3 },
-      { id: "alerts", label: "Alerts & Insights", href: "/alerts", icon: Bell },
-    ]
-  },
-  {
-    title: "TEAM & CLIENTS",
+    title: "TEAM & WORKSPACE",
     items: [
       { id: "team", label: "Team Members", href: "/team", icon: Users },
-      { id: "permissions", label: "Permissions", href: "/team/permissions", icon: Shield },
-      { id: "workspaces", label: "Client Workspaces", href: "/workspaces", icon: Package },
+      { id: "team-members", label: "Team Collaboration", href: "/connections/team", icon: Users },
       { id: "approvals", label: "Approval Flows", href: "/approvals", icon: FileText },
-      { id: "reports", label: "Reports", href: "/reports", icon: FileText },
+      { id: "accounts", label: "Accounts", href: "/accounts", icon: Shield },
     ]
   },
   {
-    title: "GROWTH TOOLS",
+    title: "GROWTH",
     items: [
-      { id: "audience", label: "Audience Builder", href: "/growth/audience", icon: Users },
-      { id: "hashtag-sets", label: "Hashtag Sets", href: "/growth/hashtags", icon: TrendingUp },
-      { id: "pods", label: "Engagement Pods", href: "/growth/pods", icon: Trophy },
-      { id: "ab-test", label: "A/B Testing", href: "/growth/ab-test", icon: Target },
+      { id: "growth-tools", label: "Growth Tools", href: "/growth-tools", icon: Trophy },
+      { id: "automation-rules", label: "Automation Rules", href: "/automation", icon: Zap },
     ]
   },
   {
@@ -121,18 +93,14 @@ const menuSections: MenuSection[] = [
     items: [
       { id: "profile", label: "Profile", href: "/settings/profile", icon: Settings },
       { id: "billing", label: "Billing", href: "/settings/billing", icon: CreditCard },
-      { id: "api", label: "API Keys", href: "/settings/api", icon: Code },
-      { id: "export", label: "Data Export", href: "/settings/export", icon: Database },
-      { id: "security", label: "Security", href: "/settings/security", icon: Shield },
+      { id: "notifications", label: "Notifications", href: "/settings/notifications", icon: Bell },
+      { id: "preferences", label: "Preferences", href: "/settings/preferences", icon: Palette },
     ]
   },
   {
     title: "RESOURCES",
     items: [
-      { id: "tutorials", label: "Tutorial Hub", href: "/tutorials", icon: BookOpen },
       { id: "help", label: "Help Center", href: "/help", icon: HelpCircle },
-      { id: "community", label: "Community", href: "/community", icon: MessageSquare },
-      { id: "support", label: "Support", href: "/support", icon: Mail },
     ]
   }
 ];
