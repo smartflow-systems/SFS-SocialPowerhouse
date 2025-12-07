@@ -125,8 +125,10 @@ export function decrypt(ciphertext: string): string {
     // Derive the same key
     const key = deriveKey(masterKey, salt);
 
-    // Create decipher
-    const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
+    // Create decipher with explicit auth tag length for GCM mode
+    const decipher = crypto.createDecipheriv(ALGORITHM, key, iv, {
+      authTagLength: AUTH_TAG_LENGTH
+    });
     decipher.setAuthTag(authTag);
 
     // Decrypt the data
