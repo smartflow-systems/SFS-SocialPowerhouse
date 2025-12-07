@@ -55,3 +55,7 @@ waitForPort = 5000
 [nix]
 packages = ["gh"]
 channel = "stable-25_05"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["npm", "start"]
