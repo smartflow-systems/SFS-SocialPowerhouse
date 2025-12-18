@@ -1,16 +1,25 @@
-import { type User, type InsertUser, type Post, type AITemplate, type TeamMember, type InsertTeamMember, type Team, type InsertTeam, type SocialAccount, type InsertSocialAccount, type UserPreferences, type InsertUserPreferences, users, posts, aiTemplates, teamMembers, teams, socialAccounts, userPreferences } from "@shared/schema";
 import {
   type User,
   type InsertUser,
   type Post,
   type AITemplate,
-  type PostComment,
+  type TeamMember,
+  type InsertTeamMember,
+  type Team,
+  type InsertTeam,
   type SocialAccount,
+  type InsertSocialAccount,
+  type UserPreferences,
+  type InsertUserPreferences,
+  type PostComment,
   users,
   posts,
   aiTemplates,
-  postComments,
-  socialAccounts
+  teamMembers,
+  teams,
+  socialAccounts,
+  userPreferences,
+  postComments
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import bcrypt from "bcrypt";
@@ -398,6 +407,8 @@ export class DbStorage implements IStorage {
       .where(eq(socialAccounts.id, id))
       .returning();
     return result[0];
+  }
+
   // Comment methods
   async getPostComments(postId: string): Promise<PostComment[]> {
     const result = await this.db.select()
@@ -538,6 +549,8 @@ export class DbStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return result[0];
+  }
+
   async getAccountsNeedingRefresh(): Promise<SocialAccount[]> {
     // Get accounts that expire within 24 hours
     const tomorrow = new Date();
@@ -585,7 +598,6 @@ export class MemStorage implements IStorage {
   private socialAccounts: Map<string, SocialAccount>;
   private userPrefs: Map<string, UserPreferences>;
   private comments: Map<string, PostComment>;
-  private socialAccounts: Map<string, SocialAccount>;
 
   constructor() {
     this.users = new Map();
@@ -596,7 +608,6 @@ export class MemStorage implements IStorage {
     this.socialAccounts = new Map();
     this.userPrefs = new Map();
     this.comments = new Map();
-    this.socialAccounts = new Map();
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -962,6 +973,8 @@ export class MemStorage implements IStorage {
     const updated = { ...user, ...updates, updatedAt: new Date() };
     this.users.set(userId, updated);
     return updated;
+  }
+
   // Comment methods
   async getPostComments(postId: string): Promise<PostComment[]> {
     return Array.from(this.comments.values())

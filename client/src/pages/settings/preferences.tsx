@@ -1,7 +1,7 @@
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Settings } from 'lucide-react';
+import { Settings, Loader2 } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -34,7 +34,6 @@ interface UserPreferences {
   weeklyReports: boolean;
 }
 
-// Form validation schema
 const preferencesFormSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),
   timezone: z.string(),
@@ -45,17 +44,27 @@ const preferencesFormSchema = z.object({
 
 type PreferencesFormValues = z.infer<typeof preferencesFormSchema>;
 
+const TIMEZONES = [
+  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
+  { value: 'America/New_York', label: 'Eastern Time (ET)' },
+  { value: 'America/Chicago', label: 'Central Time (CT)' },
+  { value: 'America/Denver', label: 'Mountain Time (MT)' },
+  { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
+  { value: 'Europe/London', label: 'London (GMT)' },
+  { value: 'Europe/Paris', label: 'Paris (CET)' },
+  { value: 'Asia/Tokyo', label: 'Tokyo (JST)' },
+  { value: 'Australia/Sydney', label: 'Sydney (AEST)' },
+];
+
 export default function Preferences() {
   const { toast } = useToast();
 
-  // Fetch preferences
   const { data: preferencesData, isLoading } = useQuery<{ preferences: UserPreferences }>({
     queryKey: ['/api/settings/preferences'],
   });
 
   const preferences = preferencesData?.preferences;
 
-  // Initialize form
   const form = useForm<PreferencesFormValues>({
     resolver: zodResolver(preferencesFormSchema),
     defaultValues: {
@@ -74,24 +83,16 @@ export default function Preferences() {
     } : undefined,
   });
 
-  // Update preferences mutation
   const updateMutation = useMutation({
     mutationFn: async (data: PreferencesFormValues) => {
       return await apiRequest('PUT', '/api/settings/preferences', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/settings/preferences'] });
-      toast({
-        title: 'Preferences saved',
-        description: 'Your preferences have been updated successfully',
-      });
+      toast({ title: 'Preferences saved', description: 'Your preferences have been updated successfully' });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Failed to save preferences',
-        description: error.message || 'An error occurred',
-        variant: 'destructive',
-      });
+      toast({ title: 'Failed to save preferences', description: error.message || 'An error occurred', variant: 'destructive' });
     },
   });
 
@@ -102,10 +103,8 @@ export default function Preferences() {
   return (
     <DashboardLayout>
       <div className="space-y-4">
-        {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2" data-testid="heading-preferences">
-          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2" data-testid="heading-preferences">
             <Settings className="w-8 h-8 text-primary" />
             Preferences
           </h1>
@@ -115,32 +114,13 @@ export default function Preferences() {
         </div>
 
         {isLoading ? (
-          <Card className="glass-card p-6">
-            <div className="text-center py-8 text-muted-foreground" data-testid="loading-preferences">
-              Loading preferences...
-        {/* Appearance */}
-        <Card className="glass-card p-4">
-          <h2 className="text-lg font-semibold mb-4">Appearance</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Theme</Label>
-                <p className="text-sm text-muted-foreground">
-                  Choose your preferred theme
-                </p>
-              </div>
-              <select className="px-3 py-2 border border-border rounded-lg bg-background">
-                <option>Dark</option>
-                <option>Light</option>
-                <option>System</option>
-              </select>
-            </div>
-          </Card>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* Appearance */}
-              <Card className="glass-card p-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <Card className="glass-card p-4">
                 <h2 className="text-lg font-semibold mb-4">Appearance</h2>
                 <div className="space-y-4">
                   <FormField
@@ -148,103 +128,55 @@ export default function Preferences() {
                     name="theme"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between">
-                        <div className="space-y-0.5">
+                        <div>
                           <FormLabel>Theme</FormLabel>
-                          <FormDescription>
-                            Choose your preferred theme
-                          </FormDescription>
+                          <FormDescription>Choose your preferred theme</FormDescription>
                         </div>
-                        <FormControl>
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger className="w-[180px]" data-testid="select-theme">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-40" data-testid="select-theme">
                               <SelectValue placeholder="Select theme" />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="light">Light</SelectItem>
-                              <SelectItem value="dark">Dark</SelectItem>
-                              <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="system">System</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormItem>
                     )}
                   />
-                </div>
-              </Card>
-
-              {/* Language & Region */}
-              <Card className="glass-card p-6">
-                <h2 className="text-lg font-semibold mb-4">Language & Region</h2>
-                <div className="space-y-4">
                   <FormField
                     control={form.control}
                     name="timezone"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between">
-                        <div className="space-y-0.5">
+                        <div>
                           <FormLabel>Timezone</FormLabel>
-                          <FormDescription>
-                            Set your local timezone
-                          </FormDescription>
+                          <FormDescription>Your local timezone for scheduling</FormDescription>
                         </div>
-                        <FormControl>
-                          <Select
-                            value={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger className="w-[220px]" data-testid="select-timezone">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-56" data-testid="select-timezone">
                               <SelectValue placeholder="Select timezone" />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="UTC">UTC</SelectItem>
-                              <SelectItem value="America/New_York">America/New York</SelectItem>
-                              <SelectItem value="America/Los_Angeles">America/Los Angeles</SelectItem>
-                              <SelectItem value="Europe/London">Europe/London</SelectItem>
-                              <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
+                          </FormControl>
+                          <SelectContent>
+                            {TIMEZONES.map((tz) => (
+                              <SelectItem key={tz.value} value={tz.value}>
+                                {tz.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormItem>
                     )}
                   />
                 </div>
               </Card>
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Compact Mode</Label>
-                <p className="text-sm text-muted-foreground">
-                  Show more content in less space
-                </p>
-              </div>
-              <input type="checkbox" className="rounded" />
-            </div>
-          </div>
-        </Card>
 
-        {/* Language & Region */}
-        <Card className="glass-card p-4">
-          <h2 className="text-lg font-semibold mb-4">Language & Region</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Language</Label>
-                <p className="text-sm text-muted-foreground">
-                  Select your preferred language
-                </p>
-              </div>
-              <select className="px-3 py-2 border border-border rounded-lg bg-background">
-                <option>English</option>
-                <option>Spanish</option>
-                <option>French</option>
-                <option>German</option>
-              </select>
-            </div>
-
-              {/* Notifications */}
-              <Card className="glass-card p-6">
+              <Card className="glass-card p-4">
                 <h2 className="text-lg font-semibold mb-4">Notifications</h2>
                 <div className="space-y-4">
                   <FormField
@@ -252,11 +184,9 @@ export default function Preferences() {
                     name="emailNotifications"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between">
-                        <div className="space-y-0.5">
+                        <div>
                           <FormLabel>Email Notifications</FormLabel>
-                          <FormDescription>
-                            Receive notifications via email
-                          </FormDescription>
+                          <FormDescription>Receive updates via email</FormDescription>
                         </div>
                         <FormControl>
                           <Switch
@@ -268,17 +198,14 @@ export default function Preferences() {
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="pushNotifications"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between">
-                        <div className="space-y-0.5">
+                        <div>
                           <FormLabel>Push Notifications</FormLabel>
-                          <FormDescription>
-                            Receive push notifications in your browser
-                          </FormDescription>
+                          <FormDescription>Receive browser push notifications</FormDescription>
                         </div>
                         <FormControl>
                           <Switch
@@ -290,46 +217,14 @@ export default function Preferences() {
                       </FormItem>
                     )}
                   />
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Date Format</Label>
-                <p className="text-sm text-muted-foreground">
-                  Choose how dates are displayed
-                </p>
-              </div>
-              <select className="px-3 py-2 border border-border rounded-lg bg-background">
-                <option>MM/DD/YYYY</option>
-                <option>DD/MM/YYYY</option>
-                <option>YYYY-MM-DD</option>
-              </select>
-            </div>
-          </div>
-        </Card>
-
-        {/* Content */}
-        <Card className="glass-card p-4">
-          <h2 className="text-lg font-semibold mb-4">Content Preferences</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Auto-save Drafts</Label>
-                <p className="text-sm text-muted-foreground">
-                  Automatically save drafts while you work
-                </p>
-              </div>
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-
                   <FormField
                     control={form.control}
                     name="weeklyReports"
                     render={({ field }) => (
                       <FormItem className="flex items-center justify-between">
-                        <div className="space-y-0.5">
+                        <div>
                           <FormLabel>Weekly Reports</FormLabel>
-                          <FormDescription>
-                            Get weekly summaries of your activity
-                          </FormDescription>
+                          <FormDescription>Receive weekly performance reports</FormDescription>
                         </div>
                         <FormControl>
                           <Switch
@@ -344,54 +239,15 @@ export default function Preferences() {
                 </div>
               </Card>
 
-              {/* Save Button */}
               <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  disabled={updateMutation.isPending}
-                  data-testid="button-save-preferences"
-                >
-                  {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
+                <Button type="submit" disabled={updateMutation.isPending} data-testid="button-save-preferences">
+                  {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Save Preferences
                 </Button>
               </div>
             </form>
           </Form>
         )}
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-          </div>
-        </Card>
-
-        {/* Privacy & Security */}
-        <Card className="glass-card p-4">
-          <h2 className="text-lg font-semibold mb-4">Privacy & Security</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Two-Factor Authentication</Label>
-                <p className="text-sm text-muted-foreground">
-                  Add extra security to your account
-                </p>
-              </div>
-              <Button variant="outline">Enable</Button>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <Label>Share Analytics</Label>
-                <p className="text-sm text-muted-foreground">
-                  Help us improve by sharing anonymous usage data
-                </p>
-              </div>
-              <input type="checkbox" defaultChecked className="rounded" />
-            </div>
-          </div>
-        </Card>
-
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <Button>Save Preferences</Button>
-        </div>
       </div>
     </DashboardLayout>
   );

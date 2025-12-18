@@ -5,9 +5,16 @@
 
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+let openaiClient: OpenAI | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY
+    });
+  }
+  return openaiClient;
+}
 
 /**
  * Platform-specific optimal posting times based on industry research
@@ -198,7 +205,7 @@ Platform-specific guidelines:
 
 Return ONLY valid JSON, no other text.`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-4',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
@@ -317,7 +324,7 @@ Requirements:
 
 Example format: ["hashtag1", "hashtag2", "hashtag3"]`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.8,
@@ -351,7 +358,7 @@ Content: "${content}"
 
 Format: { "sentiment": "positive|neutral|negative", "confidence": 0.0-1.0 }`;
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,

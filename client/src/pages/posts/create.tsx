@@ -3,7 +3,6 @@ import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
@@ -12,24 +11,26 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { useLocation } from 'wouter';
 import { z } from 'zod';
-import { PenSquare, Send, Calendar, Save } from 'lucide-react';
+import { PenSquare, Send, Calendar, Save, Loader2 } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { apiRequest } from '@/lib/queryClient';
-import { insertPostSchema } from '@shared/schema';
 
-const createPostSchema = insertPostSchema.extend({
+const createPostSchema = z.object({
   content: z.string().min(1, 'Content is required'),
   platforms: z.array(z.string()).min(1, 'Select at least one platform'),
   status: z.enum(['draft', 'scheduled', 'published']).default('draft'),
-}).omit({ userId: true });
+  scheduledAt: z.date().optional(),
+  aiGenerated: z.boolean().default(false),
+});
 
 type CreatePostForm = z.infer<typeof createPostSchema>;
 
 const AVAILABLE_PLATFORMS = [
-  { id: 'facebook', label: 'Facebook' },
-  { id: 'instagram', label: 'Instagram' },
-  { id: 'twitter', label: 'Twitter' },
-  { id: 'linkedin', label: 'LinkedIn' },
+  { id: 'facebook', label: 'Facebook', icon: '📘' },
+  { id: 'instagram', label: 'Instagram', icon: '📷' },
+  { id: 'twitter', label: 'Twitter', icon: '🐦' },
+  { id: 'linkedin', label: 'LinkedIn', icon: '💼' },
+  { id: 'tiktok', label: 'TikTok', icon: '🎵' },
 ];
 
 export default function CreatePost() {
@@ -45,7 +46,6 @@ export default function CreatePost() {
       content: '',
       platforms: [],
       status: 'draft',
-      scheduledAt: undefined,
       aiGenerated: false,
     },
   });
@@ -63,10 +63,7 @@ export default function CreatePost() {
         published: { title: 'Post published', description: 'Your post has been published successfully' },
       };
       const message = messages[variables.status];
-      toast({
-        title: message.title,
-        description: message.description,
-      });
+      toast({ title: message.title, description: message.description });
       form.reset();
       setScheduleDate('');
       setScheduleTime('');
@@ -104,7 +101,7 @@ export default function CreatePost() {
         });
         return;
       }
-      form.setValue('scheduledAt', scheduledAt as any);
+      form.setValue('scheduledAt', scheduledAt);
     }
     form.setValue('status', status);
     form.handleSubmit((data) => {
@@ -126,29 +123,27 @@ export default function CreatePost() {
         </div>
 
         <Form {...form}>
-          <form className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2 space-y-4">
               <Card className="glass-card p-4">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Post Content</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="What's on your mind?"
-                            className="mt-2 min-h-48"
-                            data-testid="input-content"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Post Content</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="What's on your mind?"
+                          className="mt-2 min-h-48"
+                          data-testid="input-content"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </Card>
 
               <Card className="glass-card p-4">
@@ -176,22 +171,23 @@ export default function CreatePost() {
                             control={form.control}
                             name="platforms"
                             render={({ field }) => (
-                              <FormItem className="flex items-center gap-2 space-y-0">
+                              <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl>
                                   <Checkbox
                                     checked={field.value?.includes(platform.id)}
                                     onCheckedChange={(checked) => {
                                       const current = field.value || [];
-                                      field.onChange(
-                                        checked
-                                          ? [...current, platform.id]
-                                          : current.filter((p) => p !== platform.id)
-                                      );
+                                      if (checked) {
+                                        field.onChange([...current, platform.id]);
+                                      } else {
+                                        field.onChange(current.filter((v) => v !== platform.id));
+                                      }
                                     }}
                                     data-testid={`checkbox-platform-${platform.id}`}
                                   />
                                 </FormControl>
-                                <FormLabel className="cursor-pointer font-normal">
+                                <FormLabel className="font-normal flex items-center gap-2">
+                                  <span>{platform.icon}</span>
                                   {platform.label}
                                 </FormLabel>
                               </FormItem>
@@ -205,77 +201,83 @@ export default function CreatePost() {
                 />
               </Card>
 
-              <Card className="glass-card p-6">
+              <Card className="glass-card p-4">
                 <h2 className="text-lg font-semibold mb-4">Schedule</h2>
-                <div className="space-y-3 mb-4">
+                <div className="space-y-3">
                   <div>
-                    <Label htmlFor="schedule-date">Date</Label>
+                    <label className="text-sm font-medium">Date</label>
                     <Input
-                      id="schedule-date"
                       type="date"
                       value={scheduleDate}
                       onChange={(e) => setScheduleDate(e.target.value)}
+                      className="mt-1"
                       data-testid="input-schedule-date"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="schedule-time">Time</Label>
+                    <label className="text-sm font-medium">Time</label>
                     <Input
-                      id="schedule-time"
                       type="time"
                       value={scheduleTime}
                       onChange={(e) => setScheduleTime(e.target.value)}
+                      className="mt-1"
                       data-testid="input-schedule-time"
                     />
                   </div>
                 </div>
               </Card>
 
-              <Card className="glass-card p-6">
               <Card className="glass-card p-4">
-                <div className="space-y-3">
-                  <Button
-                    type="button"
-                    className="w-full gap-2"
-                    onClick={() => handleSubmitStatus('published')}
-                    disabled={createPostMutation.isPending}
-                    data-testid="button-publish-now"
-                  >
-                    <Send className="w-4 h-4" />
-                    {createPostMutation.isPending && form.watch('status') === 'published' 
-                      ? 'Publishing...' 
-                      : 'Publish Now'}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="w-full gap-2"
-                    onClick={() => handleSubmitStatus('scheduled')}
-                    disabled={createPostMutation.isPending}
-                    data-testid="button-schedule-post"
-                  >
-                    <Calendar className="w-4 h-4" />
-                    {createPostMutation.isPending && form.watch('status') === 'scheduled' 
-                      ? 'Scheduling...' 
-                      : 'Schedule Post'}
-                  </Button>
+                <h2 className="text-lg font-semibold mb-4">Actions</h2>
+                <div className="space-y-2">
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full gap-2"
+                    className="w-full"
                     onClick={() => handleSubmitStatus('draft')}
                     disabled={createPostMutation.isPending}
                     data-testid="button-save-draft"
                   >
-                    <Save className="w-4 h-4" />
-                    {createPostMutation.isPending && form.watch('status') === 'draft' 
-                      ? 'Saving...' 
-                      : 'Save as Draft'}
+                    {createPostMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4 mr-2" />
+                    )}
+                    Save Draft
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleSubmitStatus('scheduled')}
+                    disabled={createPostMutation.isPending}
+                    data-testid="button-schedule"
+                  >
+                    {createPostMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Calendar className="w-4 h-4 mr-2" />
+                    )}
+                    Schedule Post
+                  </Button>
+                  <Button
+                    type="button"
+                    className="w-full bg-sfs-gold hover:bg-sfs-gold-hover text-sfs-black"
+                    onClick={() => handleSubmitStatus('published')}
+                    disabled={createPostMutation.isPending}
+                    data-testid="button-publish"
+                  >
+                    {createPostMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Send className="w-4 h-4 mr-2" />
+                    )}
+                    Publish Now
                   </Button>
                 </div>
               </Card>
             </div>
-          </form>
+          </div>
         </Form>
       </div>
     </DashboardLayout>

@@ -1,5 +1,12 @@
 import { storage } from "./storage";
 import type { Post } from "@shared/schema";
+import {
+  publishToFacebook as publishToFacebookReal,
+  publishToTwitter as publishToTwitterReal,
+  publishToLinkedIn as publishToLinkedInReal,
+  publishToInstagram as publishToInstagramReal,
+} from "./publishers";
+import { withRetry } from "./utils/retry";
 
 // Platform-specific character limits
 const PLATFORM_LIMITS = {
@@ -30,94 +37,36 @@ export function validatePostForPlatform(content: string, platform: string): { va
   return { valid: true };
 }
 
-// Placeholder for actual platform publishing
-// In production, these would call real platform APIs
+// Real Facebook publishing with retry logic
 async function publishToFacebook(post: Post): Promise<{ success: boolean; error?: string; platformPostId?: string }> {
-  console.log(`[Facebook] Publishing post ${post.id}: ${post.content.substring(0, 50)}...`);
-
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  // Simulate 90% success rate
-  const success = Math.random() > 0.1;
-
-  if (success) {
-    return {
-      success: true,
-      platformPostId: `fb_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-  } else {
-    return {
-      success: false,
-      error: 'Facebook API temporarily unavailable'
-    };
-  }
+  return withRetry(
+    () => publishToFacebookReal(post, post.userId),
+    { maxAttempts: 3, initialDelay: 2000 }
+  );
 }
 
+// Real Instagram publishing with retry logic
 async function publishToInstagram(post: Post): Promise<{ success: boolean; error?: string; platformPostId?: string }> {
-  console.log(`[Instagram] Publishing post ${post.id}: ${post.content.substring(0, 50)}...`);
-
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  const success = Math.random() > 0.1;
-
-  if (success) {
-    return {
-      success: true,
-      platformPostId: `ig_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-  } else {
-    return {
-      success: false,
-      error: 'Instagram API rate limit exceeded'
-    };
-  }
+  return withRetry(
+    () => publishToInstagramReal(post, post.userId),
+    { maxAttempts: 3, initialDelay: 2000 }
+  );
 }
 
+// Real Twitter publishing with retry logic
 async function publishToTwitter(post: Post): Promise<{ success: boolean; error?: string; platformPostId?: string }> {
-  console.log(`[Twitter] Publishing post ${post.id}: ${post.content.substring(0, 50)}...`);
-
-  // Validate character limit
-  const validation = validatePostForPlatform(post.content, 'twitter');
-  if (!validation.valid) {
-    return { success: false, error: validation.error };
-  }
-
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  const success = Math.random() > 0.1;
-
-  if (success) {
-    return {
-      success: true,
-      platformPostId: `tw_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-  } else {
-    return {
-      success: false,
-      error: 'Twitter authentication failed'
-    };
-  }
+  return withRetry(
+    () => publishToTwitterReal(post, post.userId),
+    { maxAttempts: 3, initialDelay: 2000 }
+  );
 }
 
+// Real LinkedIn publishing with retry logic
 async function publishToLinkedIn(post: Post): Promise<{ success: boolean; error?: string; platformPostId?: string }> {
-  console.log(`[LinkedIn] Publishing post ${post.id}: ${post.content.substring(0, 50)}...`);
-
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  const success = Math.random() > 0.1;
-
-  if (success) {
-    return {
-      success: true,
-      platformPostId: `li_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-  } else {
-    return {
-      success: false,
-      error: 'LinkedIn API error'
-    };
-  }
+  return withRetry(
+    () => publishToLinkedInReal(post, post.userId),
+    { maxAttempts: 3, initialDelay: 2000 }
+  );
 }
 
 async function publishToTikTok(post: Post): Promise<{ success: boolean; error?: string; platformPostId?: string }> {

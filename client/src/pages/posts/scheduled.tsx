@@ -17,9 +17,7 @@ export default function ScheduledPosts() {
   const { data, isLoading } = useQuery<{ posts: Post[] }>({
     queryKey: ['/api/posts', { status: 'scheduled' }],
     queryFn: async () => {
-      const res = await fetch('/api/posts?status=scheduled', {
-        credentials: 'include',
-      });
+      const res = await fetch('/api/posts?status=scheduled', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to fetch scheduled posts');
       return res.json();
     },
@@ -31,17 +29,10 @@ export default function ScheduledPosts() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/posts'] });
-      toast({
-        title: 'Post deleted',
-        description: 'Scheduled post has been deleted successfully',
-      });
+      toast({ title: 'Post deleted', description: 'Scheduled post has been deleted successfully' });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to delete post',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: error.message || 'Failed to delete post', variant: 'destructive' });
     },
   });
 
@@ -52,17 +43,10 @@ export default function ScheduledPosts() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/posts'] });
-      toast({
-        title: 'Post published',
-        description: 'Your post has been published successfully',
-      });
+      toast({ title: 'Post published', description: 'Your post has been published successfully' });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to publish post',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: error.message || 'Failed to publish post', variant: 'destructive' });
     },
   });
 
@@ -70,13 +54,9 @@ export default function ScheduledPosts() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2" data-testid="heading-scheduled">
       <div className="space-y-4">
-        {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2" data-testid="heading-scheduled">
             <Clock className="w-8 h-8 text-primary" />
             Scheduled Posts
           </h1>
@@ -103,10 +83,10 @@ export default function ScheduledPosts() {
         ) : (
           <div className="space-y-4">
             {scheduledPosts.map((post) => (
-              <Card key={post.id} className="glass-card p-6" data-testid={`card-scheduled-${post.id}`}>
-                <div className="flex items-start justify-between">
+              <Card key={post.id} className="glass-card p-4" data-testid={`card-scheduled-${post.id}`}>
+                <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
                       {post.platforms.map((platform) => (
                         <span
                           key={platform}
@@ -127,19 +107,6 @@ export default function ScheduledPosts() {
                           : 'No schedule set'}
                       </span>
                     </div>
-        {/* Scheduled Posts List */}
-        <div className="space-y-4">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Card key={i} className="glass-card p-4">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">
-                      Facebook
-                    </span>
-                    <span className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full">
-                      Instagram
-                    </span>
                   </div>
                   <div className="flex gap-2">
                     <Button

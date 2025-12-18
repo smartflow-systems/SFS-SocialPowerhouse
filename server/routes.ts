@@ -28,6 +28,7 @@ import {
   calculateGrowth,
   getPlatformInsights
 } from "./analytics";
+import { validatePassword } from "./utils/password-validator";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication Routes
@@ -43,10 +44,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      if (password.length < 8) {
+      // Validate password strength
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.isValid) {
         return res.status(400).json({
-          error: "Invalid password",
-          message: "Password must be at least 8 characters long"
+          error: "Weak password",
+          message: "Password does not meet security requirements",
+          details: passwordValidation.errors
         });
       }
 

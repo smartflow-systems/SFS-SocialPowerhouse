@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, jsonb, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, jsonb, boolean, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -31,7 +31,11 @@ export const socialAccounts = pgTable("social_accounts", {
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index("social_accounts_user_id_idx").on(table.userId),
+  platformIdx: index("social_accounts_platform_idx").on(table.platform),
+  isActiveIdx: index("social_accounts_is_active_idx").on(table.isActive),
+}));
 
 // Posts/Content
 export const posts = pgTable("posts", {
@@ -52,7 +56,13 @@ export const posts = pgTable("posts", {
   hashtags: jsonb("hashtags").$type<string[]>(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index("posts_user_id_idx").on(table.userId),
+  statusIdx: index("posts_status_idx").on(table.status),
+  scheduledAtIdx: index("posts_scheduled_at_idx").on(table.scheduledAt),
+  publishedAtIdx: index("posts_published_at_idx").on(table.publishedAt),
+  approvalStatusIdx: index("posts_approval_status_idx").on(table.approvalStatus),
+}));
 
 // Post Comments (for approval workflows and team collaboration)
 export const postComments = pgTable("post_comments", {
@@ -93,7 +103,11 @@ export const analyticsSnapshots = pgTable("analytics_snapshots", {
   reach: integer("reach").default(0),
   snapshotDate: timestamp("snapshot_date").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  postIdIdx: index("analytics_post_id_idx").on(table.postId),
+  socialAccountIdIdx: index("analytics_social_account_id_idx").on(table.socialAccountId),
+  snapshotDateIdx: index("analytics_snapshot_date_idx").on(table.snapshotDate),
+}));
 
 // Teams - workspace/organization entity
 export const teams = pgTable("teams", {

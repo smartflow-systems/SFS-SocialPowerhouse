@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFS Design Kit - Setup Wizard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0D0D0D 0%, #1a1410 100%);
+            color: #f5f5dc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFD700, #E6C200);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+        }
+        
+        h1 {
+            color: #FFD700;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: rgba(245, 245, 220, 0.6);
+            font-size: 16px;
+        }
+        
+        .method-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .method-card {
+            background: rgba(59, 47, 47, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .method-card:hover {
+            background: rgba(59, 47, 47, 0.8);
+            border-color: #FFD700;
+            transform: translateY(-4px);
+        }
+        
+        .method-card.active {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .method-number {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .method-title {
+            color: #FFD700;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .method-time {
+            color: rgba(245, 245, 220, 0.5);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .method-description {
+            color: rgba(245, 245, 220, 0.7);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .content {
+            background: rgba(59, 47, 47, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            color: #FFD700;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .step-content {
+            color: rgba(245, 245, 220, 0.8);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .step-content ol, .step-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .step-content li {
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: rgba(13, 13, 13, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            color: #e0e0e0;
+        }
+        
+        .code-block code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .copy-button {
+            background: #FFD700;
+            color: #0D0D0D;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-button:hover {
+            background: #E6C200;
+            transform: scale(1.05);
+        }
+        
+        .copy-button.copied {
+            background: #4CAF50;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: #FFD700;
+            color: #0D0D0D;
+            margin-left: auto;
+        }
+        
+        .btn-primary:hover {
+            background: #E6C200;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .checklist {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 3px solid #4CAF50;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: rgba(245, 245, 220, 0.8);
+        }
+        
+        .checklist-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            accent-color: #FFD700;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #FFD700;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">✨</div>
+            <h1>SFS Design Kit Setup</h1>
+            <p class="subtitle">Choose your setup method below</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+        </div>
+        
+        <div class="method-selector">
+            <div class="method-card active" onclick="selectMethod('auto')">
+                <div class="method-number">1</div>
+                <div class="method-title">Auto Script</div>
+                <div class="method-time">30 seconds</div>
+                <div class="method-description">One command does everything automatically</div>
+            </div>
+            
+            <div class="method-card" onclick="selectMethod('copy')">
+                <div class="method-number">2</div>
+                <div class="method-title">Copy-Paste</div>
+                <div class="method-time">1 minute</div>
+                <div class="method-description">Right-click copy from Replit GUI</div>
+            </div>
+            
+            <div class="method-card" onclick="selectMethod('manual')">
+                <div class="method-number">3</div>
+                <div class="method-title">Manual Steps</div>
+                <div class="method-time">5 minutes</div>
+                <div class="method-description">Step-by-step instructions</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Method 1: Auto Script -->
+            <div id="auto" class="step active">
+                <div class="step-title">1️⃣ Auto Script Setup</div>
+                <div class="step-content">
+                    <p>The easiest way - just run one command!</p>
+                    
+                    <p><strong>In your new app's terminal:</strong></p>
+                    <div class="code-block">
+                        <code>bash ../sfs-socialpowerhouse/sfs-design-kit/setup.sh</code>
+                    </div>
+                    
+                    <button class="copy-button" onclick="copyToClipboard('bash ../sfs-socialpowerhouse/sfs-design-kit/setup.sh', this)">Copy Command</button>
+                    
+                    <p style="margin-top: 20px; color: #4CAF50;">✓ Everything is copied automatically!</p>
+                </div>
+            </div>
+            
+            <!-- Method 2: Copy-Paste -->
+            <div id="copy" class="step">
+                <div class="step-title">2️⃣ Copy-Paste from Replit</div>
+                <div class="step-content">
+                    <ol>
+                        <li><strong>In SFS Social PowerHouse project:</strong> Find the <code>sfs-design-kit</code> folder in the file tree</li>
+                        <li><strong>Right-click the folder</strong> → Select <strong>Copy</strong></li>
+                        <li><strong>Switch to your other app</strong></li>
+                        <li><strong>Right-click the root folder</strong> → Select <strong>Paste</strong></li>
+                        <li><strong>Done!</strong> The entire design kit is now in your app</li>
+                    </ol>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Copied sfs-design-kit folder</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Pasted into new app</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checkbox">
+                            <span>Ready to use!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Method 3: Manual -->
+            <div id="manual" class="step">
+                <div class="step-title">3️⃣ Manual Setup Steps</div>
+                <div class="step-content">
+                    <p><strong>Step 1: Copy CSS file</strong></p>
+                    <p>Copy <code>sfs-design-kit/styles/sfs-theme.css</code> to <code>client/src/index.css</code></p>
+                    
+                    <p style="margin-top: 20px;"><strong>Step 2: Copy components</strong></p>
+                    <p>Copy these files from <code>sfs-design-kit/components/</code> to <code>client/src/components/</code>:</p>
+                    <ul>
+                        <li><code>SFSHamburgerMenu.tsx</code></li>
+                        <li><code>GlassCard.tsx</code></li>
+                        <li><code>GoldenButton.tsx</code></li>
+                        <li><code>SFSNavigation.tsx</code></li>
+                    </ul>
+                    
+                    <p style="margin-top: 20px;"><strong>Step 3: Use in your app</strong></p>
+                    <div class="code-block">
+                        <code>import SFSHamburgerMenu from "@/components/SFSHamburgerMenu";
+
+const menuItems = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Settings", href: "/settings" },
+];
+
+&lt;SFSHamburgerMenu 
+  menuItems={menuItems} 
+  appName="Your App Name" 
+/&gt;</code>
+                    </div>
+                    
+                    <button class="copy-button" onclick="copyToClipboard(`import SFSHamburgerMenu from '@/components/SFSHamburgerMenu';\n\nconst menuItems = [\n  { label: 'Dashboard', href: '/dashboard' },\n  { label: 'Settings', href: '/settings' },\n];\n\n<SFSHamburgerMenu menuItems={menuItems} appName='Your App Name' />`, this)">Copy Code</button>
+                </div>
+            </div>
+            
+            <!-- Success screen -->
+            <div id="success" class="step">
+                <div class="success-message">
+                    <div class="success-icon">🎉</div>
+                    <h2 style="color: #FFD700; margin-bottom: 10px;">You're All Set!</h2>
+                    <p style="color: rgba(245, 245, 220, 0.8); margin-bottom: 20px;">Your SFS design system is now installed and ready to use.</p>
+                    
+                    <div class="code-block" style="text-align: left; margin: 20px 0;">
+                        <code><strong>Next Steps:</strong>
+1. Update your App.tsx to import the components
+2. Create your menu items array
+3. Use &lt;SFSHamburgerMenu&gt; in your layout
+4. Start building with SFS styles!</code>
+                    </div>
+                    
+                    <p style="color: #4CAF50; font-weight: 600;">All components are glassmorphic, gold-accented, and ready to go!</p>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display:none;">← Back</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next →</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMethod = 'auto';
+        
+        function selectMethod(method) {
+            currentMethod = method;
+            document.querySelectorAll('.method-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.method-card').classList.add('active');
+            
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(method).classList.add('active');
+            
+            updateProgressBar();
+        }
+        
+        function nextStep() {
+            if (currentMethod === 'auto' || currentMethod === 'copy' || currentMethod === 'manual') {
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                document.getElementById('success').classList.add('active');
+                currentMethod = 'success';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('prevBtn').style.display = 'block';
+                updateProgressBar();
+            }
+        }
+        
+        function previousStep() {
+            if (currentMethod === 'success') {
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                document.getElementById('auto').classList.add('active');
+                currentMethod = 'auto';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('prevBtn').style.display = 'none';
+                updateProgressBar();
+            }
+        }
+        
+        function updateProgressBar() {
+            const methods = ['auto', 'copy', 'manual', 'success'];
+            const index = methods.indexOf(currentMethod);
+            const progress = ((index + 1) / methods.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+        
+        updateProgressBar();
+    </script>
+</body>
+</html>

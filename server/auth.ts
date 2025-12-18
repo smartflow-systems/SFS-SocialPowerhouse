@@ -2,30 +2,48 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { type Express } from "express";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import createMemoryStore from "memorystore";
 import { storage } from "./storage";
 import bcrypt from "bcrypt";
 import type { User } from "@shared/schema";
+import { db } from "@db/drizzle";
 
+const PgStore = connectPgSimple(session);
 const MemoryStore = createMemoryStore(session);
 
 export function setupAuth(app: Express) {
+  // Determine which session store to use based on environment
+  const sessionStore = process.env.NODE_ENV === 'production' || process.env.USE_PG_SESSIONS === 'true'
+    ? new PgStore({
+        // @ts-ignore - Pool from Neon serverless is compatible
+        pool: db,
+        tableName: 'session',
+        createTableIfMissing: true,
+        pruneSessionInterval: 60 * 15, // Prune every 15 minutes
+        ttl: 7 * 24 * 60 * 60 // 7 days in seconds
+      })
+    : new MemoryStore({
+        checkPeriod: 86400000, // prune expired entries every 24h
+      });
+
   // Session configuration
   app.use(
     session({
       secret: process.env.SESSION_SECRET || "sfs-powerhouse-secret-key-change-in-production",
       resave: false,
       saveUninitialized: false,
-      store: new MemoryStore({
-        checkPeriod: 86400000, // prune expired entries every 24h
-      }),
+      store: sessionStore,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? 'strict' : 'lax',
       },
     })
   );
+
+  console.log(`Using ${process.env.NODE_ENV === 'production' || process.env.USE_PG_SESSIONS === 'true' ? 'PostgreSQL' : 'Memory'} session store`);
 
   // Initialize passport
   app.use(passport.initialize());

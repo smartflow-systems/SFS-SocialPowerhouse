@@ -113,6 +113,18 @@ The application uses a custom "SFS Design System" with:
 - Subscription tier system: starter, growth, agency, enterprise
 - Gamification element: SFS level (1-10, "Level 10 Mage" easter egg)
 
+## Design Kit Distribution
+
+**SFS Design Kit** is available for easy copying to other apps:
+- **Location**: `sfs-design-kit/` folder in project root
+- **Contains**: Reusable components (HamburgerMenu, GlassCard, GoldenButton, Navigation), CSS theme, and setup scripts
+- **Setup Methods**:
+  1. **Auto Script** (30 seconds): Run `bash ../sfs-socialpowerhouse/sfs-design-kit/setup.sh`
+  2. **Copy-Paste** (1 min): Right-click `sfs-design-kit` folder → Copy/Paste in new app
+  3. **Web Wizard** (Interactive): Open `sfs-design-kit/SETUP-WIZARD.html` in browser for guided setup
+  4. **Manual** (5 min): Follow step-by-step guide in `sfs-design-kit/SETUP-GUIDE.md`
+- **For Updates**: Edit design kit components in master app, then re-copy to other apps
+
 ## External Dependencies
 
 ### Third-Party Services

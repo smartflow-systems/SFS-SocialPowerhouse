@@ -1,77 +1,55 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-sfs-black: #0D0D0D;
+  --color-sfs-brown: #3B2F2F;
+  --color-sfs-gold: #FFD700;
+  --color-sfs-gold-hover: #E6C200;
+  --color-sfs-beige: #F5F5DC;
+  
+  --color-background: hsl(0 0% 5%);
+  --color-foreground: hsl(60 29% 92%);
+  
+  --color-card: hsl(0 11% 21%);
+  --color-card-foreground: hsl(60 29% 92%);
+  
+  --color-popover: hsl(0 11% 21%);
+  --color-popover-foreground: hsl(60 29% 92%);
+  
+  --color-primary: hsl(51 100% 50%);
+  --color-primary-foreground: hsl(0 0% 5%);
+  
+  --color-secondary: hsl(0 11% 21%);
+  --color-secondary-foreground: hsl(60 29% 92%);
+  
+  --color-muted: hsl(0 11% 15%);
+  --color-muted-foreground: hsl(60 15% 70%);
+  
+  --color-accent: hsl(51 100% 60%);
+  --color-accent-foreground: hsl(0 0% 5%);
+  
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(60 29% 92%);
+  
+  --color-border: hsl(51 100% 50% / 0.3);
+  --color-input: hsl(0 11% 21%);
+  --color-ring: hsl(51 100% 50%);
+  
+  --color-sidebar: hsl(0 11% 18%);
+  --color-sidebar-foreground: hsl(60 29% 92%);
+  --color-sidebar-border: hsl(0 11% 25%);
+  
+  --color-chart-1: hsl(51 100% 50%);
+  --color-chart-2: hsl(173 58% 39%);
+  --color-chart-3: hsl(197 37% 24%);
+  --color-chart-4: hsl(43 74% 66%);
+  --color-chart-5: hsl(27 87% 67%);
+}
 
 @layer base {
-  :root {
-    /* Base colors - SFS Black & Beige */
-    --background: 0 0% 5%;
-    --foreground: 60 29% 92%;
-    
-    /* Card colors - SFS Brown with slight variations */
-    --card: 0 11% 21%;
-    --card-foreground: 60 29% 92%;
-    --card-border: 51 100% 50%;
-    
-    /* Popover */
-    --popover: 0 11% 21%;
-    --popover-foreground: 60 29% 92%;
-    --popover-border: 51 100% 50%;
-    
-    /* Primary - SFS Gold */
-    --primary: 51 100% 50%;
-    --primary-foreground: 0 0% 5%;
-    --primary-border: 51 100% 50%;
-    
-    /* Secondary */
-    --secondary: 0 11% 21%;
-    --secondary-foreground: 60 29% 92%;
-    --secondary-border: 0 11% 30%;
-    
-    /* Muted */
-    --muted: 0 11% 15%;
-    --muted-foreground: 60 15% 70%;
-    --muted-border: 0 11% 25%;
-    
-    /* Accent - Lighter gold variation */
-    --accent: 51 100% 60%;
-    --accent-foreground: 0 0% 5%;
-    --accent-border: 51 100% 60%;
-    
-    /* Destructive */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 60 29% 92%;
-    --destructive-border: 0 84% 60%;
-    
-    /* Input & Border */
-    --input: 0 11% 21%;
-    --border: 51 100% 50%;
-    --ring: 51 100% 50%;
-    
-    /* Chart colors */
-    --chart-1: 51 100% 50%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    
-    /* Sidebar colors */
-    --sidebar: 0 11% 18%;
-    --sidebar-foreground: 60 29% 92%;
-    --sidebar-border: 0 11% 25%;
-    --sidebar-ring: 51 100% 50%;
-    
-    --sidebar-primary: 51 100% 50%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-primary-border: 51 100% 50%;
-    
-    --sidebar-accent: 51 100% 60%;
-    --sidebar-accent-foreground: 0 0% 5%;
-    --sidebar-accent-border: 51 100% 60%;
-  }
-  
   body {
-    @apply bg-sfs-black text-sfs-beige;
+    background-color: #0D0D0D;
+    color: #F5F5DC;
   }
 }
 
@@ -100,12 +78,24 @@
   }
 
   .sidebar-item {
-    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sfs-beige/70;
-    @apply hover:text-sfs-gold hover:bg-sfs-gold/10 transition-all duration-200;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: rgba(245, 245, 220, 0.7);
+    transition: all 0.2s ease;
+  }
+
+  .sidebar-item:hover {
+    color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.1);
   }
   
   .sidebar-item.active {
-    @apply bg-sfs-gold/20 text-sfs-gold border-l-2 border-sfs-gold;
+    background-color: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+    border-left: 2px solid #FFD700;
   }
 
   .custom-scrollbar::-webkit-scrollbar { width: 8px; }

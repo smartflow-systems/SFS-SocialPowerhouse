@@ -1,11 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import {
   BarChart3,
   TrendingUp,
-  Zap,
   Eye,
   Loader2,
   Calendar,
@@ -41,9 +39,7 @@ export default function Analytics() {
   const { data, isLoading } = useQuery<AnalyticsData>({
     queryKey: ['/api/analytics'],
     queryFn: async () => {
-      const res = await fetch('/api/analytics', {
-        credentials: 'include',
-      });
+      const res = await fetch('/api/analytics', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to fetch analytics');
       return res.json();
     },
@@ -83,7 +79,7 @@ export default function Analytics() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2" data-testid="heading-analytics">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2 text-sfs-gold" data-testid="heading-analytics">
             <BarChart3 className="w-8 h-8 text-primary" />
             Analytics Dashboard
           </h1>
@@ -93,7 +89,7 @@ export default function Analytics() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="glass-card p-6" data-testid="card-total-posts">
             <div className="flex items-start justify-between">
               <div>
@@ -112,59 +108,6 @@ export default function Analytics() {
               <div>
                 <p className="text-sm text-muted-foreground font-medium">Published</p>
                 <h3 className="text-3xl font-bold mt-2">{analytics.publishedPosts}</h3>
-      <div className="space-y-3 md:space-y-4">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold mb-1 flex items-center gap-2 text-sfs-gold">
-              <BarChart3 className="w-6 h-6" />
-              Analytics Dashboard
-            </h1>
-            <p className="text-sm text-sfs-beige/70">
-              Track your social media performance
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Select value={dateRange} onValueChange={setDateRange}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="7">Last 7 days</SelectItem>
-                <SelectItem value="30">Last 30 days</SelectItem>
-                <SelectItem value="90">Last 90 days</SelectItem>
-                <SelectItem value="365">Last year</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <Card className="glass-card p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs text-sfs-beige/60 font-medium">Total Reach</p>
-                <h3 className="text-2xl font-bold mt-1 text-sfs-gold">{metrics.totalReach.toLocaleString()}</h3>
-                <p className="text-xs text-primary mt-1">
-                  {posts.length} posts
-                </p>
-              </div>
-              <Eye className="w-6 h-6 text-primary/70" />
-            </div>
-          </Card>
-
-          <Card className="glass-card p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Total Engagement</p>
-                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.totalEngagement.toLocaleString()}</h3>
                 <p className="text-sm text-primary mt-2">
                   {analytics.completionRate}% completion rate
                 </p>
@@ -178,11 +121,6 @@ export default function Analytics() {
               <div>
                 <p className="text-sm text-muted-foreground font-medium">In Progress</p>
                 <h3 className="text-3xl font-bold mt-2">{analytics.draftPosts + analytics.scheduledPosts}</h3>
-          <Card className="glass-card p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Engagement Rate</p>
-                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.engagementRate}%</h3>
                 <p className="text-sm text-muted-foreground mt-2">
                   {analytics.draftPosts} drafts, {analytics.scheduledPosts} scheduled
                 </p>
@@ -196,11 +134,6 @@ export default function Analytics() {
               <div>
                 <p className="text-sm text-muted-foreground font-medium">AI Generated</p>
                 <h3 className="text-3xl font-bold mt-2">{aiPercentage}%</h3>
-          <Card className="glass-card p-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">AI Generated</p>
-                <h3 className="text-2xl font-bold text-sfs-gold mt-2">{metrics.aiPercentage}%</h3>
                 <p className="text-sm text-primary mt-2">
                   {analytics.aiGeneratedPosts} of {analytics.totalPosts} posts
                 </p>
@@ -212,8 +145,6 @@ export default function Analytics() {
 
         {/* Platform Distribution */}
         <Card className="glass-card p-6" data-testid="card-platform-distribution">
-        {/* Platform Performance */}
-        <Card className="glass-card p-4">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
             Platform Distribution
@@ -252,78 +183,9 @@ export default function Analytics() {
           )}
         </Card>
 
-        {/* Top Performing Posts */}
-        {topPosts.length > 0 && (
-          <Card className="glass-card p-4">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
-              Top Performing Posts
-            </h2>
-
-            <div className="space-y-3">
-              {topPosts.map((post, index) => (
-                <div
-                  key={post.id}
-                  className="flex items-start gap-4 p-4 border border-border rounded-lg hover:border-primary/50 transition-colors"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
-                    {index + 1}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      {post.platforms.map(platform => (
-                        <span key={platform} className="text-lg">{PLATFORM_ICONS[platform]}</span>
-                      ))}
-                      {post.aiGenerated && (
-                        <Badge variant="outline" className="border-primary/30">
-                          <Target className="w-3 h-3 mr-1" />
-                          AI
-                        </Badge>
-                      )}
-                    </div>
-
-                    <p className="text-sm font-medium line-clamp-2 mb-2">{post.content}</p>
-
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Eye className="w-4 h-4" />
-                        {Math.floor((post as any).engagementScore * 10)} views
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Heart className="w-4 h-4" />
-                        {Math.floor((post as any).engagementScore * 0.3)} likes
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4" />
-                        {Math.floor((post as any).engagementScore * 0.1)} comments
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Share2 className="w-4 h-4" />
-                        {Math.floor((post as any).engagementScore * 0.05)} shares
-                      </span>
-                    </div>
-
-                    {post.publishedAt && (
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Published {post.publishedAt.toLocaleDateString()}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-primary">{(post as any).engagementScore}</p>
-                    <p className="text-xs text-muted-foreground">engagement</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        )}
-
         {/* Insights */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Card className="glass-card p-4">
+          <Card className="glass-card p-6">
             <h2 className="text-xl font-semibold mb-4">Key Insights</h2>
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
@@ -346,7 +208,7 @@ export default function Analytics() {
                   <div>
                     <p className="font-medium">AI Content Usage</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {aiPercentage}% of your posts are AI-generated, saving you time
+                      {aiPercentage}% of your posts are AI-generated
                     </p>
                   </div>
                 </div>
@@ -366,12 +228,12 @@ export default function Analytics() {
             </div>
           </Card>
 
-          <Card className="glass-card p-4">
+          <Card className="glass-card p-6">
             <h2 className="text-xl font-semibold mb-4">Recommendations</h2>
             <div className="space-y-3">
               {analytics.draftPosts > 0 && (
                 <div className="p-3 rounded-lg border border-border">
-                  <p className="font-medium text-sm">📝 Complete your drafts</p>
+                  <p className="font-medium text-sm">Complete your drafts</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     You have {analytics.draftPosts} drafts waiting to be published
                   </p>
@@ -380,7 +242,7 @@ export default function Analytics() {
 
               {platformMetrics.length > 0 && (
                 <div className="p-3 rounded-lg border border-border">
-                  <p className="font-medium text-sm">🎯 Focus on {platformMetrics[0]?.platform}</p>
+                  <p className="font-medium text-sm">Focus on {platformMetrics[0]?.platform}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     Your most-used platform - keep the momentum going
                   </p>
@@ -389,7 +251,7 @@ export default function Analytics() {
 
               {analytics.postsLast30Days < 10 && (
                 <div className="p-3 rounded-lg border border-border">
-                  <p className="font-medium text-sm">📈 Increase posting frequency</p>
+                  <p className="font-medium text-sm">Increase posting frequency</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     Posting 3-5 times per week can increase reach by up to 40%
                   </p>
@@ -397,7 +259,7 @@ export default function Analytics() {
               )}
 
               <div className="p-3 rounded-lg border border-border">
-                <p className="font-medium text-sm">✨ Leverage AI generation</p>
+                <p className="font-medium text-sm">Leverage AI generation</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   AI-generated posts maintain consistent quality and save time
                 </p>

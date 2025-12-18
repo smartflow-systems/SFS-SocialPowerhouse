@@ -1,0 +1,234 @@
+/**
+ * SFS Design Kit - Theme Styles
+ * 
+ * Copy this file to your project's CSS and import it.
+ * Works with Tailwind CSS v4 @theme directive.
+ * 
+ * SmartFlow Systems - SFS Social PowerHouse Design System
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* SFS Brand Colors */
+  --color-sfs-black: #0D0D0D;
+  --color-sfs-brown: #3B2F2F;
+  --color-sfs-gold: #FFD700;
+  --color-sfs-gold-hover: #E6C200;
+  --color-sfs-beige: #F5F5DC;
+  
+  /* Semantic Colors */
+  --color-background: hsl(0 0% 5%);
+  --color-foreground: hsl(60 29% 92%);
+  
+  --color-card: hsl(0 11% 21%);
+  --color-card-foreground: hsl(60 29% 92%);
+  
+  --color-popover: hsl(0 11% 21%);
+  --color-popover-foreground: hsl(60 29% 92%);
+  
+  --color-primary: hsl(51 100% 50%);
+  --color-primary-foreground: hsl(0 0% 5%);
+  
+  --color-secondary: hsl(0 11% 21%);
+  --color-secondary-foreground: hsl(60 29% 92%);
+  
+  --color-muted: hsl(0 11% 15%);
+  --color-muted-foreground: hsl(60 15% 70%);
+  
+  --color-accent: hsl(51 100% 60%);
+  --color-accent-foreground: hsl(0 0% 5%);
+  
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(60 29% 92%);
+  
+  --color-border: hsl(51 100% 50% / 0.3);
+  --color-input: hsl(0 11% 21%);
+  --color-ring: hsl(51 100% 50%);
+  
+  --color-sidebar: hsl(0 11% 18%);
+  --color-sidebar-foreground: hsl(60 29% 92%);
+  --color-sidebar-border: hsl(0 11% 25%);
+  
+  --color-chart-1: hsl(51 100% 50%);
+  --color-chart-2: hsl(173 58% 39%);
+  --color-chart-3: hsl(197 37% 24%);
+  --color-chart-4: hsl(43 74% 66%);
+  --color-chart-5: hsl(27 87% 67%);
+}
+
+@layer base {
+  body {
+    background-color: #0D0D0D;
+    color: #F5F5DC;
+  }
+}
+
+@layer components {
+  /* Glass Card - Glassmorphism Effect */
+  .glass-card {
+    background: rgba(59, 47, 47, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 24px rgba(255, 215, 0, 0.15), inset 0 1px 0 rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(255, 215, 0, 0.25);
+    transform: translateY(-1px);
+  }
+
+  /* Circuit Background Animation */
+  .circuit-bg {
+    background-color: #0D0D0D;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFD700;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%23E6C200;stop-opacity:0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0,100 L200,100 L200,300 L400,300 M400,300 L600,300 L600,100 L800,100' stroke='url(%23g)' stroke-width='2' fill='none'/%3E%3Ccircle cx='200' cy='100' r='5' fill='%23FFD700' opacity='0.6'%3E%3Canimate attributeName='opacity' values='0.4;1;0.4' dur='3s' repeatCount='indefinite'/%3E%3C/circle%3E%3Ccircle cx='400' cy='300' r='5' fill='%23FFD700' opacity='0.6'%3E%3Canimate attributeName='opacity' values='0.4;1;0.4' dur='2s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/svg%3E");
+    background-size: 500px 500px;
+    animation: circuit-flow 30s linear infinite;
+  }
+
+  /* Sidebar Item Styles */
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: rgba(245, 245, 220, 0.7);
+    transition: all 0.2s ease;
+  }
+
+  .sidebar-item:hover {
+    color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.1);
+  }
+  
+  .sidebar-item.active {
+    background-color: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+    border-left: 2px solid #FFD700;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: rgba(59, 47, 47, 0.1); }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(#FFD700, #E6C200); border-radius: 4px; }
+
+  /* Animations */
+  .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+  .animate-slide-up { animation: slideUp 0.5s ease-out; }
+  .animate-scale-in { animation: scaleIn 0.3s ease-out; }
+  .animate-slide-in-left { animation: slideInLeft 0.5s ease-out; }
+  .animate-slide-in-right { animation: slideInRight 0.5s ease-out; }
+  .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.3) 50%, rgba(255, 215, 0, 0.1) 100%);
+    background-size: 200% 100%;
+  }
+
+  .page-transition { animation: pageTransition 0.4s ease-out; }
+
+  /* Staggered Animation */
+  .stagger-animation > * { animation: fadeIn 0.5s ease-in-out; }
+  .stagger-animation > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-animation > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-animation > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-animation > *:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-animation > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-animation > *:nth-child(6) { animation-delay: 0.3s; }
+
+  /* Hover Effects */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
+  }
+
+  .hover-glow {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.1);
+    border-color: rgba(255, 215, 0, 0.6);
+  }
+
+  /* Golden Button */
+  .golden-button {
+    background: linear-gradient(135deg, #FFD700 0%, #E6C200 100%);
+    color: #0D0D0D;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+  .golden-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  }
+  .golden-button:active {
+    transform: translateY(0);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes circuit-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 500px 500px; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pageTransition {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

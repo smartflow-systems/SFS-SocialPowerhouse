@@ -47,11 +47,11 @@ export default function FeaturesGrid() {
       <div className="absolute inset-0 circuit-bg opacity-30" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
             Everything You Need to Dominate Social
           </h2>
-          <p className="text-xl text-sfs-beige/70">
+          <p className="text-sm text-sfs-beige/70">
             Powerful features designed for modern marketers
           </p>
         </div>
@@ -65,14 +65,14 @@ export default function FeaturesGrid() {
                 href={feature.href}
                 data-testid={`link-feature-${feature.title.toLowerCase().replace(/\s+/g, '-')}`}
               >
-                <div className="glass-card p-8 group hover:scale-[1.02] transition-transform duration-300 cursor-pointer">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-sfs-gold to-sfs-gold-hover flex items-center justify-center mb-6 group-hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] transition-shadow">
-                    <Icon className="w-7 h-7 text-sfs-black" />
+                <div className="glass-card p-6 group hover:scale-[1.01] transition-transform duration-300 cursor-pointer">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-sfs-gold to-sfs-gold-hover flex items-center justify-center mb-4 group-hover:shadow-sm transition-shadow">
+                    <Icon className="w-6 h-6 text-sfs-black" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <h3 className="text-base font-bold text-white mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sfs-beige/70 leading-relaxed">
+                  <p className="text-xs text-sfs-beige/70 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

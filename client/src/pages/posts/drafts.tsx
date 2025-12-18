@@ -17,9 +17,7 @@ export default function Drafts() {
   const { data, isLoading } = useQuery<{ posts: Post[] }>({
     queryKey: ['/api/posts', { status: 'draft' }],
     queryFn: async () => {
-      const res = await fetch('/api/posts?status=draft', {
-        credentials: 'include',
-      });
+      const res = await fetch('/api/posts?status=draft', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to fetch drafts');
       return res.json();
     },
@@ -31,17 +29,10 @@ export default function Drafts() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/posts'] });
-      toast({
-        title: 'Draft deleted',
-        description: 'Your draft has been deleted successfully',
-      });
+      toast({ title: 'Draft deleted', description: 'Your draft has been deleted successfully' });
     },
     onError: (error: any) => {
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to delete draft',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: error.message || 'Failed to delete draft', variant: 'destructive' });
     },
   });
 
@@ -49,13 +40,9 @@ export default function Drafts() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2" data-testid="heading-drafts">
       <div className="space-y-4">
-        {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-sfs-gold mb-2 flex items-center gap-2" data-testid="heading-drafts">
             <FileText className="w-8 h-8 text-primary" />
             Drafts
           </h1>
@@ -80,9 +67,9 @@ export default function Drafts() {
             </Button>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {drafts.map((draft) => (
-              <Card key={draft.id} className="glass-card p-6" data-testid={`card-draft-${draft.id}`}>
+              <Card key={draft.id} className="glass-card p-4" data-testid={`card-draft-${draft.id}`}>
                 <div className="flex items-start justify-between mb-3">
                   <FileText className="w-6 h-6 text-primary" />
                   <Button
@@ -121,14 +108,6 @@ export default function Drafts() {
                 >
                   <Edit className="w-4 h-4" />
                   Continue Editing
-        {/* Drafts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="glass-card p-4">
-              <div className="flex items-start justify-between mb-3">
-                <FileText className="w-6 h-6 text-primary" />
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="w-4 h-4" />
                 </Button>
               </Card>
             ))}
