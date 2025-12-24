@@ -29,8 +29,13 @@ import {
   getPlatformInsights
 } from "./analytics";
 import { validatePassword } from "./utils/password-validator";
+import rateLimit from "express-rate-limit";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const preferencesRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 300
+  });
   // Authentication Routes
   app.post("/api/auth/register", async (req, res, next) => {
     try {
@@ -1905,7 +1910,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Settings API Routes
   // Get user preferences
-  app.get("/api/settings/preferences", requireAuth, async (req, res) => {
+  app.get("/api/settings/preferences", preferencesRateLimiter, requireAuth, async (req, res) => {
     try {
       const user = req.user as User;
       const preferences = await storage.getUserPreferences(user.id);
