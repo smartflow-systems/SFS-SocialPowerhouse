@@ -9,7 +9,20 @@ import {
   Send,
   Bot,
   User,
-  Trash2
+  Trash2,
+  Menu,
+  X,
+  Home,
+  Sparkles,
+  Calendar,
+  BarChart3,
+  FileText,
+  Globe,
+  Users,
+  Zap,
+  HelpCircle,
+  CreditCard,
+  ChevronDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -28,8 +41,75 @@ interface Chat {
   createdAt: Date;
 }
 
+interface NavItem {
+  icon: typeof Home;
+  label: string;
+  path: string;
+}
+
+interface NavSection {
+  title: string;
+  items: NavItem[];
+}
+
+const navSections: NavSection[] = [
+  {
+    title: "Main",
+    items: [
+      { icon: Home, label: "Dashboard", path: "/dashboard" },
+      { icon: BarChart3, label: "Live Dashboard", path: "/live-dashboard" },
+      { icon: MessageSquare, label: "Social Inbox", path: "/social-inbox" },
+      { icon: Sparkles, label: "AI Studio", path: "/ai-studio" },
+      { icon: Calendar, label: "Calendar", path: "/calendar" },
+      { icon: BarChart3, label: "Analytics", path: "/analytics" },
+    ]
+  },
+  {
+    title: "Content",
+    items: [
+      { icon: Sparkles, label: "AI Generator", path: "/ai/generator" },
+      { icon: Sparkles, label: "Visual Creator", path: "/ai-visual-creator" },
+      { icon: FileText, label: "Posts", path: "/posts" },
+      { icon: FileText, label: "Templates", path: "/templates" },
+      { icon: Calendar, label: "Scheduler", path: "/scheduler" },
+      { icon: FileText, label: "Content Library", path: "/content-library" },
+    ]
+  },
+  {
+    title: "Connections",
+    items: [
+      { icon: Globe, label: "Social Accounts", path: "/connections/social-accounts" },
+      { icon: BarChart3, label: "Growth Tools", path: "/growth-tools" },
+      { icon: Globe, label: "Social Listening", path: "/social-listening" },
+      { icon: BarChart3, label: "Competitors", path: "/competitor-intelligence" },
+      { icon: Zap, label: "Automation", path: "/automation" },
+      { icon: Globe, label: "Alerts", path: "/connections/alerts" },
+    ]
+  },
+  {
+    title: "Team",
+    items: [
+      { icon: Users, label: "Team Members", path: "/connections/team" },
+      { icon: Users, label: "Approvals", path: "/approvals" },
+      { icon: Users, label: "Accounts", path: "/accounts" },
+    ]
+  },
+  {
+    title: "Settings",
+    items: [
+      { icon: Settings, label: "Profile", path: "/settings/profile" },
+      { icon: Settings, label: "Preferences", path: "/settings/preferences" },
+      { icon: CreditCard, label: "Billing", path: "/settings/billing" },
+      { icon: Settings, label: "Notifications", path: "/settings/notifications" },
+      { icon: HelpCircle, label: "Help", path: "/help" },
+    ]
+  }
+];
+
 export default function ChatUI() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<string[]>(["Main"]);
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -45,6 +125,14 @@ export default function ChatUI() {
     scrollToBottom();
   }, [activeChat?.messages]);
 
+  const toggleSection = (title: string) => {
+    setExpandedSections(prev => 
+      prev.includes(title) 
+        ? prev.filter(s => s !== title)
+        : [...prev, title]
+    );
+  };
+
   const createNewChat = () => {
     const newChat: Chat = {
       id: crypto.randomUUID(),
@@ -55,6 +143,7 @@ export default function ChatUI() {
     setChats(prev => [newChat, ...prev]);
     setActiveChat(newChat);
     setInputValue("");
+    setMenuOpen(false);
     inputRef.current?.focus();
   };
 
@@ -132,67 +221,127 @@ export default function ChatUI() {
       {/* Sidebar */}
       <aside
         className={`${
-          sidebarOpen ? "w-64" : "w-0"
-        } bg-sfs-black flex flex-col transition-all duration-300 overflow-hidden`}
+          sidebarOpen ? "w-72" : "w-0"
+        } bg-sfs-black flex flex-col transition-all duration-300 overflow-hidden relative`}
         data-testid="chat-sidebar"
       >
-        <div className="flex flex-col h-full p-3 min-w-64">
-          {/* Logo */}
-          <div className="flex items-center gap-2 px-2 py-4 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-sfs-gold flex items-center justify-center">
-              <Bot className="w-5 h-5 text-sfs-black" />
+        <div className="flex flex-col h-full min-w-72">
+          {/* Header with Hamburger */}
+          <div className="flex items-center justify-between p-4 border-b border-sfs-gold/20">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-sfs-gold flex items-center justify-center">
+                <Bot className="w-5 h-5 text-sfs-black" />
+              </div>
+              <span className="font-semibold text-sfs-beige text-lg">SmartFlow</span>
             </div>
-            <span className="font-semibold text-sfs-beige text-lg">SmartFlow</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-sfs-beige/70 hover:text-sfs-gold hover:bg-sfs-gold/10"
+              data-testid="button-hamburger"
+            >
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
           </div>
 
-          {/* New Chat Button */}
-          <Button
-            onClick={createNewChat}
-            className="w-full justify-start gap-2 mb-4 bg-transparent border border-sfs-gold/30 text-sfs-beige hover:bg-sfs-gold/10 hover:border-sfs-gold"
-            data-testid="button-new-chat"
-          >
-            <Plus className="w-4 h-4" />
-            New Chat
-          </Button>
-
-          {/* Chat History */}
-          <ScrollArea className="flex-1 -mx-1 px-1">
-            <div className="space-y-1">
-              {chats.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
-                    activeChat?.id === chat.id
-                      ? "bg-sfs-gold/20 text-sfs-gold"
-                      : "text-sfs-beige/70 hover:bg-sfs-brown/30 hover:text-sfs-beige"
-                  }`}
-                  onClick={() => setActiveChat(chat)}
-                  data-testid={`chat-item-${chat.id}`}
+          {/* Menu Panel (slides over chat history) */}
+          {menuOpen ? (
+            <ScrollArea className="flex-1">
+              <div className="p-3">
+                {navSections.map((section) => (
+                  <div key={section.title} className="mb-2">
+                    <button
+                      onClick={() => toggleSection(section.title)}
+                      className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-sfs-beige/50 uppercase tracking-wider hover:text-sfs-gold transition-colors"
+                      data-testid={`button-section-${section.title.toLowerCase()}`}
+                    >
+                      <span>{section.title}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${expandedSections.includes(section.title) ? "rotate-180" : ""}`} />
+                    </button>
+                    {expandedSections.includes(section.title) && (
+                      <div className="space-y-1">
+                        {section.items.map((item) => (
+                          <Link key={item.path} href={item.path}>
+                            <div
+                              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sfs-beige/70 hover:text-sfs-gold hover:bg-sfs-gold/10 cursor-pointer transition-colors"
+                              data-testid={`nav-item-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                            >
+                              <item.icon className="w-4 h-4" />
+                              <span className="text-sm">{item.label}</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+            <>
+              {/* New Chat Button */}
+              <div className="p-3">
+                <Button
+                  onClick={createNewChat}
+                  className="w-full justify-start gap-2 bg-transparent border border-sfs-gold/30 text-sfs-beige hover:bg-sfs-gold/10 hover:border-sfs-gold"
+                  data-testid="button-new-chat"
                 >
-                  <MessageSquare className="w-4 h-4 shrink-0" />
-                  <span className="flex-1 truncate text-sm">{chat.title}</span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteChat(chat.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity"
-                    data-testid={`button-delete-chat-${chat.id}`}
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
+                  <Plus className="w-4 h-4" />
+                  New Chat
+                </Button>
+              </div>
 
-          {/* Settings Link */}
-          <Link href="/settings/preferences" data-testid="link-settings">
-            <div className="flex items-center gap-2 px-3 py-2 mt-2 rounded-lg text-sfs-beige/70 hover:bg-sfs-brown/30 hover:text-sfs-beige cursor-pointer transition-colors">
-              <Settings className="w-4 h-4" />
-              <span className="text-sm">Settings</span>
-            </div>
-          </Link>
+              {/* Chat History */}
+              <ScrollArea className="flex-1 px-3">
+                <div className="space-y-1">
+                  {chats.length === 0 ? (
+                    <p className="text-sfs-beige/40 text-sm text-center py-8">
+                      No chats yet
+                    </p>
+                  ) : (
+                    chats.map((chat) => (
+                      <div
+                        key={chat.id}
+                        className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+                          activeChat?.id === chat.id
+                            ? "bg-sfs-gold/20 text-sfs-gold"
+                            : "text-sfs-beige/70 hover:bg-sfs-brown/30 hover:text-sfs-beige"
+                        }`}
+                        onClick={() => setActiveChat(chat)}
+                        data-testid={`chat-item-${chat.id}`}
+                      >
+                        <MessageSquare className="w-4 h-4 shrink-0" />
+                        <span className="flex-1 truncate text-sm">{chat.title}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteChat(chat.id);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity"
+                          data-testid={`button-delete-chat-${chat.id}`}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
+
+              {/* Bottom Links */}
+              <div className="p-3 border-t border-sfs-gold/20">
+                <button
+                  onClick={() => setMenuOpen(true)}
+                  className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sfs-beige/70 hover:bg-sfs-brown/30 hover:text-sfs-beige cursor-pointer transition-colors"
+                  data-testid="link-menu"
+                >
+                  <Menu className="w-4 h-4" />
+                  <span className="text-sm">Menu</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </aside>
 
@@ -200,7 +349,7 @@ export default function ChatUI() {
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-sfs-brown/80 hover:bg-sfs-brown p-1 rounded-r-md text-sfs-beige/70 hover:text-sfs-gold transition-all"
-        style={{ left: sidebarOpen ? "256px" : "0" }}
+        style={{ left: sidebarOpen ? "288px" : "0" }}
         data-testid="button-toggle-sidebar"
       >
         {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -212,7 +361,6 @@ export default function ChatUI() {
         <ScrollArea className="flex-1">
           <div className="max-w-3xl mx-auto px-4 py-8">
             {!activeChat || activeChat.messages.length === 0 ? (
-              /* Empty State */
               <div className="flex flex-col items-center justify-center h-[60vh] text-center">
                 <div className="w-16 h-16 rounded-2xl bg-sfs-gold/20 flex items-center justify-center mb-6">
                   <Bot className="w-8 h-8 text-sfs-gold" />
@@ -225,7 +373,6 @@ export default function ChatUI() {
                 </p>
               </div>
             ) : (
-              /* Message List */
               <div className="space-y-6">
                 {activeChat.messages.map((message) => (
                   <div

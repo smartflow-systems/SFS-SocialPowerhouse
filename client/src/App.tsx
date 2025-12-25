@@ -60,7 +60,8 @@ import ChatUI from "@/pages/chat/index";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={ChatUI} />
+      <Route path="/home" component={Home} />
 
       {/* Authentication Routes */}
       <Route path="/auth/login" component={Login} />
@@ -118,9 +119,6 @@ function Router() {
 
       {/* Help Route */}
       <Route path="/help" component={Help} />
-
-      {/* Chat Route */}
-      <Route path="/chat" component={ChatUI} />
 
       {/* Catch all - 404 */}
       <Route component={NotFound} />
