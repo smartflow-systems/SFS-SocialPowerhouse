@@ -25,9 +25,6 @@ export default function HeroSection() {
           <span className="text-sm text-sfs-gold font-medium">New: AI-Powered Content Optimization</span>
         </div>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white leading-tight">
-          AI-Powered Social Media<br />Management Made Simple
-        </h1>
         <p className="text-base md:text-lg text-sfs-beige/80 mb-8 max-w-2xl mx-auto">
           Create engaging content, schedule posts across platforms, and grow your audience with intelligent AI assistance. Save hours every week.
         </p>
