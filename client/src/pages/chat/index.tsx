@@ -190,11 +190,27 @@ export default function ChatUI() {
     setInputValue("");
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/ai/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: inputValue.trim(),
+          tone: "professional", // Default tone
+          platforms: ["social media"],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate response");
+      }
+
+      const data = await response.json();
+      
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",
-        content: "Hello! I'm SmartFlow Assistant. I'm here to help you with social media content creation, scheduling, and optimization. How can I assist you today?",
+        content: data.content,
         timestamp: new Date(),
       };
 
@@ -205,8 +221,24 @@ export default function ChatUI() {
 
       setActiveChat(finalChat);
       setChats(prev => prev.map(c => c.id === finalChat.id ? finalChat : c));
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "I apologize, but I encountered an error. Please ensure your OpenAI API key is configured correctly.",
+        timestamp: new Date(),
+      };
+      
+      const errorChat = {
+        ...updatedChat,
+        messages: [...updatedChat.messages, errorMessage],
+      };
+      setActiveChat(errorChat);
+      setChats(prev => prev.map(c => c.id === errorChat.id ? errorChat : c));
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
