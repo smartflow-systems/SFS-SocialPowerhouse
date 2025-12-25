@@ -356,15 +356,41 @@ export default function ChatUI() {
       </button>
 
       {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col bg-sfs-beige" data-testid="chat-main">
+      <main className="flex-1 flex flex-col bg-[#0D0D0D] relative overflow-hidden" data-testid="chat-main">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-sfs-gold/5 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-sfs-gold/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+          
+          {/* Shooting Stars Effect */}
+          <div className="absolute inset-0">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-[2px] h-[2px] bg-white rounded-full animate-shooting-star"
+                style={{
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 5}s`,
+                  animationDuration: `${2 + Math.random() * 3}s`
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
         {/* Messages */}
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 relative z-10">
           <div className="max-w-3xl mx-auto px-4 py-8">
             {!activeChat || activeChat.messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[60vh]">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sfs-gold/10 border border-sfs-gold/20">
-                  <Bot className="w-4 h-4 text-sfs-gold" />
-                  <span className="text-sm font-medium text-sfs-brown">SmartFlow Assistant</span>
+                <div className="glass-card px-6 py-3 flex items-center gap-3 border border-sfs-gold/30 hover-elevate group">
+                  <div className="w-8 h-8 rounded-full bg-sfs-gold/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Bot className="w-5 h-5 text-sfs-gold animate-pulse" />
+                  </div>
+                  <span className="text-lg font-semibold bg-gradient-to-r from-sfs-gold via-white to-sfs-gold bg-clip-text text-transparent">
+                    SmartFlow Assistant
+                  </span>
                 </div>
               </div>
             ) : (

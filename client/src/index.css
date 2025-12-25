@@ -170,6 +170,29 @@
   }
 }
 
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) rotate(-45deg) scale(1);
+  }
+  100% {
+    transform: translateX(200px) translateY(200px) rotate(-45deg) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-shooting-star {
+  animation: shooting-star linear infinite;
+}
+
+.sfs-gradient-text {
+  @apply bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent;
+}
+
 @keyframes circuit-flow {
   0% { background-position: 0 0; }
   100% { background-position: 500px 500px; }
