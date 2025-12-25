@@ -26,6 +26,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/client/src/$1',
+    '^@shared/(.*)$': '<rootDir>/shared/$1',
     '^@db/(.*)$': '<rootDir>/db/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
