@@ -361,16 +361,11 @@ export default function ChatUI() {
         <ScrollArea className="flex-1">
           <div className="max-w-3xl mx-auto px-4 py-8">
             {!activeChat || activeChat.messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-[60vh] text-center">
-                <div className="w-16 h-16 rounded-2xl bg-sfs-gold/20 flex items-center justify-center mb-6">
-                  <Bot className="w-8 h-8 text-sfs-gold" />
+              <div className="flex flex-col items-center justify-center h-[60vh]">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sfs-gold/10 border border-sfs-gold/20">
+                  <Bot className="w-4 h-4 text-sfs-gold" />
+                  <span className="text-sm font-medium text-sfs-brown">SmartFlow Assistant</span>
                 </div>
-                <h1 className="text-2xl font-semibold text-sfs-black mb-2">
-                  SmartFlow Assistant
-                </h1>
-                <p className="text-sfs-brown/70 max-w-md">
-                  Your AI-powered companion for social media content creation, scheduling, and optimization.
-                </p>
               </div>
             ) : (
               <div className="space-y-6">
