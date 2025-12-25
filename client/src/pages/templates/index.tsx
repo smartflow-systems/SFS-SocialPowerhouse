@@ -365,7 +365,7 @@ export default function Templates() {
                     {copied ? "Copied!" : "Copy to Clipboard"}
                   </Button>
                   <Link href="/ai-studio">
-                    <Button className="flex-1" data-testid="button-customize-with-ai">
+                    <Button className="flex-1 bg-sfs-gold hover:bg-sfs-gold-hover text-sfs-black" data-testid="button-customize-with-ai">
                       <Sparkles className="w-4 h-4 mr-2" />
                       Customize with AI
                     </Button>
