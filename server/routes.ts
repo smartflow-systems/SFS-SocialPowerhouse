@@ -34,7 +34,7 @@ import rateLimit from "express-rate-limit";
 export async function registerRoutes(app: Express): Promise<Server> {
   const preferencesRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 300
+    max: 100
   });
   // Authentication Routes
   app.post("/api/auth/register", async (req, res, next) => {
