@@ -1,71 +1,80 @@
-import { Users, Calendar, TrendingUp, Sparkles } from "lucide-react";
+import { Users, Zap, TrendingUp, Clock } from "lucide-react";
 
 const stats = [
   {
     icon: Users,
     value: "5,000+",
-    label: "Active Users",
-    description: "Marketers trust us daily"
+    label: "Active Professionals",
+    description: "Agencies, brands & marketers",
+    color: "from-blue-500 to-blue-400",
   },
   {
-    icon: Calendar,
-    value: "2M+",
-    label: "Posts Scheduled",
-    description: "Content published worldwide"
+    icon: Zap,
+    value: "50M+",
+    label: "AI Posts Generated",
+    description: "Content created with our AI",
+    color: "from-sfs-gold to-yellow-400",
   },
   {
     icon: TrendingUp,
     value: "300%",
     label: "Avg. Engagement Boost",
-    description: "Compared to manual posting"
+    description: "Compared to manual posting",
+    color: "from-green-500 to-emerald-400",
   },
   {
-    icon: Sparkles,
-    value: "50M+",
-    label: "AI-Generated Posts",
-    description: "Created with our AI tools"
-  }
+    icon: Clock,
+    value: "10hrs",
+    label: "Saved Per Week",
+    description: "Per team member, on average",
+    color: "from-purple-500 to-violet-400",
+  },
 ];
 
 export default function StatsSection() {
   return (
-    <section className="py-16 md:py-20 bg-sfs-black relative overflow-hidden" data-testid="section-stats">
-      <div className="absolute inset-0 circuit-bg opacity-20" />
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3" data-testid="text-stats-heading">
-            Trusted by Thousands of Marketers
-          </h2>
-          <p className="text-sfs-beige/70 max-w-xl mx-auto" data-testid="text-stats-subheading">
-            Join the growing community of professionals who rely on SFS Social PowerHouse
-          </p>
-        </div>
+    <section className="py-16 md:py-20 bg-[#0a0a0a] relative overflow-hidden border-y border-sfs-gold/10" data-testid="section-stats">
+      <div className="absolute inset-0 circuit-bg opacity-10" />
 
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <div
                 key={index}
-                className="glass-card p-6 text-center group hover:scale-[1.02] transition-transform duration-300"
+                className="text-center group"
                 data-testid={`stat-card-${index}`}
               >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-sfs-gold to-sfs-gold-hover flex items-center justify-center mx-auto mb-4 group-hover:shadow-md transition-shadow">
-                  <Icon className="w-6 h-6 text-sfs-black" />
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-shadow`}>
+                  <Icon className="w-7 h-7 text-white" />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-sfs-gold mb-1" data-testid={`stat-value-${index}`}>
+                <div className="text-4xl md:text-5xl font-bold text-sfs-gold mb-1" data-testid={`stat-value-${index}`}>
                   {stat.value}
                 </div>
-                <div className="text-white font-semibold mb-1" data-testid={`stat-label-${index}`}>
+                <div className="text-white font-semibold mb-1 text-sm" data-testid={`stat-label-${index}`}>
                   {stat.label}
                 </div>
-                <div className="text-xs text-sfs-beige/60" data-testid={`stat-description-${index}`}>
+                <div className="text-xs text-sfs-beige/50" data-testid={`stat-description-${index}`}>
                   {stat.description}
                 </div>
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-12 text-center">
+          <p className="text-sfs-beige/40 text-sm">
+            Trusted by marketing teams at startups, agencies, and Fortune 500 companies worldwide
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-8 h-8 rounded-full bg-sfs-gold/10 border border-sfs-gold/20 flex items-center justify-center">
+                <span className="text-sfs-gold text-xs font-bold">{String.fromCharCode(65 + i)}</span>
+              </div>
+            ))}
+            <span className="text-sfs-beige/40 text-xs ml-2">+4,995 more professionals</span>
+          </div>
         </div>
       </div>
     </section>

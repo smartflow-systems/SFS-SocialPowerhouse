@@ -36,15 +36,22 @@ The application uses a custom "SFS Design System" with:
 - Form validation with React Hook Form and Zod schemas
 - Landing page feature cards with navigation links to app sections
 
-**Landing Page Features:**
-- Interactive feature cards in FeaturesGrid component
-- Each card links to corresponding app functionality:
-  - AI Content Generation → /ai-studio
-  - Multi-Platform Scheduling → /posts/create
-  - Analytics Dashboard → /analytics
-  - Team Collaboration → /connections/team
-  - Content Calendar → /calendar
-  - Smart Suggestions → /ai-studio
+**Landing Page Features (Sales-Optimized):**
+- High-conversion hero with bold headline, gradient gold text, social proof badge, platform icons
+- Monthly/annual billing toggle on pricing section (35% savings displayed)
+- 9-feature grid with category badges ("Most Used", "New") and hover interactions
+- AI Showcase section with real product screenshots and feature lists
+- Testimonials, Stats section with animated counters
+- CTA section with "Start Free Trial" and "Try AI Assistant" CTAs
+- Navigation: transparent → solid on scroll, mobile hamburger menu
+
+**Chat UI (at /chat):**
+- Fully dark theme (#0D0D0D, #111111) matching brand
+- 6 suggested prompt cards on empty state (LinkedIn post, Instagram growth, tweets, strategy, calendar, repurpose)
+- Copy-to-clipboard on assistant messages (hover to reveal)
+- Hamburger navigation menu with 5 collapsible sections
+- "New Chat" button and conversation history in sidebar
+- Input auto-submits on Enter key, Shift+Enter for newline
 
 ### Backend Architecture
 

@@ -60,8 +60,8 @@ import ChatUI from "@/pages/chat/index";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={ChatUI} />
-      <Route path="/home" component={Home} />
+      <Route path="/" component={Home} />
+      <Route path="/chat" component={ChatUI} />
 
       {/* Authentication Routes */}
       <Route path="/auth/login" component={Login} />
