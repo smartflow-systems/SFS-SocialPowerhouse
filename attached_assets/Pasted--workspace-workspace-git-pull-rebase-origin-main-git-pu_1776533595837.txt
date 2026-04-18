@@ -1,0 +1,45 @@
+~/workspace$ 
+~/workspace$ git pull --rebase origin main
+git push -u origin main
+remote: Enumerating objects: 360, done.
+remote: Counting objects: 100% (15/15), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 360 (delta 11), reused 13 (delta 11), pack-reused 345 (from 1)
+Receiving objects: 100% (360/360), 771.14 KiB | 6.59 MiB/s, done.
+Resolving deltas: 100% (228/228), completed with 10 local objects.
+From https://github.com/smartflow-systems/SFS-SocialPowerhouse
+ * branch            main       -> FETCH_HEAD
+ + 5e055f8...4ac068d main       -> origin/main  (forced update)
+Auto-merging client/src/App.tsx
+CONFLICT (content): Merge conflict in client/src/App.tsx
+Auto-merging client/src/components/HeroSection.tsx
+CONFLICT (content): Merge conflict in client/src/components/HeroSection.tsx
+CONFLICT (modify/delete): client/src/pages/chat/index.tsx deleted in HEAD and modified in 43991af (Revamp landing page and AI assistant for a more professional user experience).  Version 43991af (Revamp landing page and AI assistant for a more professional user experience) of client/src/pages/chat/index.tsx left in tree.
+error: could not apply 43991af... Revamp landing page and AI assistant for a more professional user experience
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 43991af... # Revamp landing page and AI assistant for a more professional user experience
+To https://github.com/smartflow-systems/SFS-SocialPowerhouse.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/smartflow-systems/SFS-SocialPowerhouse.git'
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace$ git pull --rebase origin main
+git push -u origin main
+error: Pulling is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+To https://github.com/smartflow-systems/SFS-SocialPowerhouse.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/smartflow-systems/SFS-SocialPowerhouse.git'
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace$ 
