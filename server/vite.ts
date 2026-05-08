@@ -7,6 +7,7 @@ import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import rateLimit from "express-rate-limit";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -67,6 +68,13 @@ export async function setupVite(app: Express, server: Server) {
   });
 }
 
+const staticFallbackLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // limit each IP to 300 fallback requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 export function serveStatic(app: Express) {
   const distPath = path.resolve(__dirname, "../dist/public");
   
@@ -86,7 +94,7 @@ export function serveStatic(app: Express) {
   }
 
   // Fall through to index.html if the file exists, otherwise serve a simple page
-  app.use("*", (_req, res) => {
+  app.use("*", staticFallbackLimiter, (_req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
     if (fs.existsSync(indexPath)) {
       res.sendFile(indexPath);
