@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import aiRouter from "./api/ai";
 import passport from "passport";
 import { requireAuth } from "./auth";
+import { requireSFSAuth, requireRole, requirePlan } from "./middleware/sfs-auth";
 import type { User } from "@shared/schema";
 import { publishPost, processScheduledPosts, validatePostForPlatform } from "./publisher";
 import { generateSuggestions, getPlatformTips } from "./suggestions";
@@ -2020,6 +2021,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", message: "SFS Social Powerhouse API" });
+  });
+
+  // ==========================================
+  // SFS-BACKEND SSO ROUTES
+  // Routes prefixed /api/sfs/* are protected by the central SFS-Backend JWT
+  // (issued by sfs-backend.replit.app). These complement — not replace — the
+  // local passport session auth above.
+  // ==========================================
+
+  // Verify the caller's SFS SSO token and return their org/plan info.
+  app.get("/api/sfs/me", requireSFSAuth, (req, res) => {
+    res.json({ user: req.sfsUser });
+  });
+
+  // Example: org-admin-only endpoint guarded by SSO role
+  app.get("/api/sfs/admin/status", requireSFSAuth, requireRole("owner", "admin"), (req, res) => {
+    res.json({ ok: true, orgId: req.sfsUser!.orgId, role: req.sfsUser!.role });
   });
 
   const httpServer = createServer(app);
