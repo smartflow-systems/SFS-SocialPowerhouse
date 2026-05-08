@@ -11,6 +11,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   name: text("name"),
   avatar: text("avatar"),
+  orgId: text("org_id").notNull().default('default'),
   subscriptionTier: text("subscription_tier").default('starter'), // starter, growth, agency, enterprise
   sfsLevel: integer("sfs_level").default(1), // Easter egg: Level 10 Mage
   createdAt: timestamp("created_at").defaultNow(),
@@ -21,6 +22,7 @@ export const users = pgTable("users", {
 export const socialAccounts = pgTable("social_accounts", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  orgId: text("org_id").notNull().default('default'),
   platform: text("platform").notNull(), // facebook, instagram, twitter, linkedin, tiktok, youtube, pinterest
   accountName: text("account_name").notNull(),
   accountId: text("account_id").notNull(),

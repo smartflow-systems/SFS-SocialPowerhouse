@@ -5,6 +5,7 @@ import aiRouter from "./api/ai";
 import passport from "passport";
 import { requireAuth } from "./auth";
 import { requireSFSAuth, requireRole, requirePlan } from "./middleware/sfs-auth";
+import { requireAuth as requireAuthCore, requireOrg } from "@smartflow-systems/auth-core";
 import type { User } from "@shared/schema";
 import { publishPost, processScheduledPosts, validatePostForPlatform } from "./publisher";
 import { generateSuggestions, getPlatformTips } from "./suggestions";
@@ -1647,7 +1648,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Content Generation Routes
-  app.use("/api/ai", aiRouter);
+  app.use("/api/ai", requireAuth, aiRouter);
 
   // Analytics endpoint
   app.get("/api/analytics", requireAuth, async (req, res) => {
@@ -2036,13 +2037,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ==========================================
 
   // Verify the caller's SFS SSO token and return their org/plan info.
-  app.get("/api/sfs/me", requireSFSAuth, (req, res) => {
-    res.json({ user: req.sfsUser });
+  app.get("/api/sfs/me", requireAuthCore, requireOrg, (req, res) => {
+    res.json({ user: req.user, orgId: req.orgId });
   });
 
   // Example: org-admin-only endpoint guarded by SSO role
-  app.get("/api/sfs/admin/status", requireSFSAuth, requireRole("owner", "admin"), (req, res) => {
-    res.json({ ok: true, orgId: req.sfsUser!.orgId, role: req.sfsUser!.role });
+  app.get("/api/sfs/admin/status", requireAuthCore, requireOrg, requireSFSAuth, requireRole("owner", "admin"), (req, res) => {
+    res.json({ ok: true, orgId: req.orgId, role: req.sfsUser!.role });
   });
 
   const httpServer = createServer(app);
