@@ -228,3 +228,4 @@ lerna-debug.log*
 *.swo
 *~
 SFS_*_HEALTH_*.md
+.env.test
