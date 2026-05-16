@@ -229,3 +229,9 @@ lerna-debug.log*
 *~
 SFS_*_HEALTH_*.md
 .env.test
+
+# Local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
