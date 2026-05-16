@@ -44,7 +44,7 @@
     "@replit/vite-plugin-cartographer": "^0.4.4",
     "@replit/vite-plugin-dev-banner": "^0.1.1",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
-    "@smartflow-systems/auth-core": "git+ssh://git@github.com/smartflow-systems/sfs-auth-core.git",
+    "@smartflow-systems/auth-core": "^1.0.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@tanstack/react-query": "^5.90.11",
     "@types/bcrypt": "^6.0.0",
