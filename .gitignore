@@ -227,3 +227,4 @@ lerna-debug.log*
 *.swp
 *.swo
 *~
+SFS_*_HEALTH_*.md
