@@ -7,7 +7,7 @@
   "scripts": {
     "start": "tsx server/index.ts",
     "dev": "tsx server/index.ts",
-    "build": "echo 'build complete' && exit 0",
+    "build": "vite build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -18,7 +18,8 @@
     "pull": "git pull --no-edit",
     "push": "git push",
     "auto-commit": "git add . && git commit -m 'chore: auto-commit [Auto-Sync]' || true",
-    "sync-all": "npm run auto-commit && npm run sync"
+    "sync-all": "npm run auto-commit && npm run sync",
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -102,13 +103,15 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/express": "^4.17.25",
     "@types/jest": "^30.0.0",
     "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.31.8",
     "jest": "^30.2.0",
     "prisma": "^6.19.3",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.6"
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=18"
